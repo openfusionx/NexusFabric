@@ -19,11 +19,13 @@
 
 package com.datasophon.api.master.alert;
 
+import com.datasophon.api.master.HostCheckActor;
 import com.datasophon.api.service.ClusterServiceRoleInstanceService;
 import com.datasophon.api.strategy.ServiceRoleStrategy;
 import com.datasophon.api.strategy.ServiceRoleStrategyContext;
 import com.datasophon.api.utils.SpringTool;
 import com.datasophon.common.Constants;
+import com.datasophon.common.enums.ServiceRoleType;
 import com.datasophon.common.command.ServiceRoleCheckCommand;
 import com.datasophon.dao.entity.ClusterServiceRoleInstanceEntity;
 
@@ -35,12 +37,17 @@ import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import akka.actor.UntypedActor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ServiceRoleCheckActor extends UntypedActor {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(HostCheckActor.class);
+
     @Override
     public void onReceive(Object msg) throws Throwable {
         if (msg instanceof ServiceRoleCheckCommand) {
+            logger.info("start to service role info");
             ClusterServiceRoleInstanceService roleInstanceService =
                     SpringTool.getApplicationContext()
                             .getBean(ClusterServiceRoleInstanceService.class);
@@ -48,20 +55,9 @@ public class ServiceRoleCheckActor extends UntypedActor {
             List<ClusterServiceRoleInstanceEntity> list =
                     roleInstanceService.list(
                             new QueryWrapper<ClusterServiceRoleInstanceEntity>()
-                                    .in(
-                                            Constants.SERVICE_ROLE_NAME,
-                                            "Prometheus",
-                                            "AlertManager",
-                                            "Krb5Kdc",
-                                            "KAdmin",
-                                            "SRFE",
-                                            "SRBE",
-                                            "DorisFE",
-                                            "DorisFEObserver",
-                                            "DorisBE",
-                                            "NameNode",
-                                            "ResourceManager",
-                                            "ElasticSearch"));
+                                    .ne(
+                                            Constants.ROLE_TYPE,
+                                            ServiceRoleType.CLIENT.getCode());
             
             if (!list.isEmpty()) {
                 Map<String, ClusterServiceRoleInstanceEntity> map = translateListToMap(list);
