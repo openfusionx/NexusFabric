@@ -19,7 +19,6 @@
 
 package com.datasophon.api.master.alert;
 
-import com.datasophon.api.master.HostCheckActor;
 import com.datasophon.api.service.ClusterServiceRoleInstanceService;
 import com.datasophon.api.strategy.ServiceRoleStrategy;
 import com.datasophon.api.strategy.ServiceRoleStrategyContext;
@@ -42,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 public class ServiceRoleCheckActor extends UntypedActor {
 
-    private static final Logger logger = LoggerFactory.getLogger(HostCheckActor.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServiceRoleCheckActor.class);
 
     @Override
     public void onReceive(Object msg) throws Throwable {
