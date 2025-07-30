@@ -19,7 +19,3 @@ from the Gradle Wrapper which was written originally by Hans Dockter and Adam Mu
 Copyright 2007 the original author or authors.
 ----------------------------------------
 
-Modifications made by openfusionx:
-  - Project renamed to NexusFabric
-  - Optimized front-end interactions  
-  - Added support for additional components 
