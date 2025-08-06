@@ -1,35 +1,34 @@
 <template>
-  <div class="cluster-setting mgr10 mgl10" style="margin-top: -1px;"   @click="showManage">
-      <svg-icon class="icon-gj" icon-class="gaojing" ></svg-icon>
+  <div
+    class="cluster-setting mgr10 mgl10"
+    style="margin-top: -1px"
+    @click="showManage"
+  >
+    <svg-icon class="icon-gj" icon-class="warn"></svg-icon>
   </div>
 </template>
 
 <script>
-import {mapMutations ,mapState} from 'vuex'
-import alarmModal from '@/components/alarmModal'
+import { mapMutations, mapState } from "vuex";
+import alarmModal from "@/components/alarmModal";
 export default {
   name: "AlarmManage",
 
   data() {
-    return {
-
-    };
+    return {};
   },
 
   mounted() {},
-  computed:{
-    ...mapState('setting', ['alarmManageVisible'])
-  
+  computed: {
+    ...mapState("setting", ["alarmManageVisible"]),
   },
   methods: {
-    ...mapMutations('setting',["showAlarmManageVisible"]),
-    showManage(){
+    ...mapMutations("setting", ["showAlarmManageVisible"]),
+    showManage() {
       //this.alarmManageVisible?this.showAlarmManageVisible(false):this.showAlarmManageVisible(true)
       let width = 1000;
       let title = "告警详情";
-      let content = (
-        <alarmModal alarmAll={true} />
-      );
+      let content = <alarmModal alarmAll={true} />;
       this.$confirm({
         width: width,
         title: title,
@@ -39,18 +38,19 @@ export default {
           return <div />;
         },
       });
-    }
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
 .cluster-setting {
-  .icon-gj{
-     color: #fff;
-     width: 16px;
-     height: 16px;
+  .icon-gj {
+    color: #fff;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
+    margin: 16px -10px 0 -10px;
   }
 }
 </style>

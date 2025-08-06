@@ -29,12 +29,23 @@
     <div class="steps-title flex-bewteen-container pdr30">
       <div>
         <a-icon v-if="currentPage !== 1" type="left" @click="goBack" />
-         {{title}}
-        </div>
+        {{ title }}
+      </div>
       <!-- <div class="close-x" @click="handleCancel">X</div> -->
-      <a-button @click="handleCancel" class="mgb16" style="height: 28px;position: absolute;right: 20px;top:15px;z-index:2" icon="close" />
+      <a-button
+        @click="handleCancel"
+        class="mgb16"
+        style="
+          height: 28px;
+          position: absolute;
+          right: 20px;
+          top: 15px;
+          z-index: 2;
+        "
+        icon="close"
+      />
       <!-- <div v-if="currentPage === 1" class="flex-bewteen-container"> -->
-        <!-- <div class="status-num mgr20">
+      <!-- <div class="status-num mgr20">
           <span :class="[hostType === 'all' ? 'host-selected' : '']" @click="changeType('all')">
             全部
             <span>10</span>
@@ -55,12 +66,37 @@
             <span>10</span>
           </span>
         </div>-->
-       <!-- <a-button type="primary" @click="retryHost('all')">全部重试</a-button>-->
+      <!-- <a-button type="primary" @click="retryHost('all')">全部重试</a-button>-->
       <!-- </div> -->
     </div>
-    <div class="table-info mgt16 steps-body" style="overflow-y: visible;max-height: 700px;">
-      <a-table v-if="currentPage === 1" @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" :scroll="{y: 500}" :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" rowKey="commandId" :pagination="pagination"></a-table>
-      <a-table v-if="[2,3].includes(currentPage)" @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" :scroll="{y: 500}" rowKey="hostCommandId" :pagination="pagination"></a-table>
+    <div
+      class="table-info mgt16 steps-body"
+      style="overflow-y: visible; max-height: 700px"
+    >
+      <a-table
+        v-if="currentPage === 1"
+        @change="tableChange"
+        :columns="columns"
+        :loading="loading"
+        :dataSource="dataSource"
+        :scroll="{ y: 500 }"
+        :rowSelection="{
+          selectedRowKeys: selectedRowKeys,
+          onChange: onSelectChange,
+        }"
+        rowKey="commandId"
+        :pagination="pagination"
+      ></a-table>
+      <a-table
+        v-if="[2, 3].includes(currentPage)"
+        @change="tableChange"
+        :columns="columns"
+        :loading="loading"
+        :dataSource="dataSource"
+        :scroll="{ y: 500 }"
+        rowKey="hostCommandId"
+        :pagination="pagination"
+      ></a-table>
       <LOGS v-if="currentPage === 4" :logData="logData" :hideCancel="true" />
     </div>
     <!-- <div class="cluster-setting-footer pdr30" v-if="stepsType === 'cluster-setting'">
@@ -123,7 +159,7 @@ export default {
   computed: {
     ...mapState({
       steps: (state) => state.steps, //深拷贝的意义在于watch里面可以在Watch里面监听他的newval和oldVal的变化
-      setting: (state) => state.setting
+      setting: (state) => state.setting,
     }),
     columns() {
       let arr = [
@@ -150,8 +186,8 @@ export default {
             this.currentPage === 1
               ? "命令"
               : this.currentPage === 2
-                ? "主机"
-                : "指令名称",
+              ? "主机"
+              : "指令名称",
           key: this.currentPage === 2 ? "hostname" : "commandName",
           dataIndex: this.currentPage === 2 ? "hostname" : "commandName",
           width: 300,
@@ -181,7 +217,14 @@ export default {
                 ) : row.commandStateCode === 2 ? (
                   <a-progress class="progress-warp" percent={text} />
                 ) : row.commandStateCode === 4 ? (
-                  <a-progress class="progress-warp" strokeColor='#FFA53D' format={()=><a-icon style="color:#FFA53D" type="exclamation-circle" />} percent={text} />
+                  <a-progress
+                    class="progress-warp"
+                    strokeColor="#FFA53D"
+                    format={() => (
+                      <a-icon style="color:#FFA53D" type="exclamation-circle" />
+                    )}
+                    percent={text}
+                  />
                 ) : (
                   <a-progress
                     class="progress-warp"
@@ -237,7 +280,7 @@ export default {
     },
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.pollingSearch();
     },
     getServiceList(flag) {
@@ -245,7 +288,9 @@ export default {
       const params = {
         pageSize: this.pagination.pageSize,
         page: this.pagination.current,
-        clusterId: this.setting.clusterId ? this.setting.clusterId : this.clusterId,
+        clusterId: this.setting.clusterId
+          ? this.setting.clusterId
+          : this.clusterId,
       };
       if (this.currentPage === 2) params.commandId = this.commandId;
       if (this.currentPage === 3) {
@@ -256,8 +301,8 @@ export default {
         this.currentPage === 1
           ? global.API.getServiceCommandlist
           : this.currentPage === 2
-            ? global.API.getServiceHostList
-            : global.API.getServiceRoleOrderList;
+          ? global.API.getServiceHostList
+          : global.API.getServiceRoleOrderList;
       // todo：这个接口地址需要替换
       this.$axiosPost(ajaxApi, params).then((res) => {
         this.loading = false;
@@ -322,9 +367,11 @@ export default {
     getLog() {
       this.$axiosPost(global.API.getHostCommandLog, {
         hostCommandId: this.hostCommandId,
-        clusterId: this.setting.clusterId ? this.setting.clusterId : this.clusterId,
+        clusterId: this.setting.clusterId
+          ? this.setting.clusterId
+          : this.clusterId,
       }).then((res) => {
-        this.loading = false
+        this.loading = false;
         this.logData = res.data;
         this.currentPage++;
         this.title = "查看日志";
@@ -359,7 +406,9 @@ export default {
       const params = {
         commandIds,
         commandType: this.steps.commandType,
-        clusterId: this.setting.clusterId ? this.setting.clusterId : this.clusterId,
+        clusterId: this.setting.clusterId
+          ? this.setting.clusterId
+          : this.clusterId,
       };
       this.$axiosPost(global.API.startExecuteCommand, params).then((res) => {
         this.selectedRowKeys = [];
@@ -372,7 +421,9 @@ export default {
     // 主机环境校验是否完成 是否可以进入下一步
     async dispatcherHostAgentCompleted(callback) {
       const params = {
-        clusterId: this.setting.clusterId ? this.setting.clusterId : this.clusterId,
+        clusterId: this.setting.clusterId
+          ? this.setting.clusterId
+          : this.clusterId,
       };
       // 等待网络请求结束
       let flag = await this.$axiosPost(

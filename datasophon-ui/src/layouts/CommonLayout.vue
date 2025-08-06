@@ -30,30 +30,31 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
-  name: 'CommonLayout',
+  name: "CommonLayout",
   computed: {
-    ...mapState('setting', ['footerLinks', 'copyright'])
-  }
-}
+    ...mapState("setting", ["footerLinks", "copyright"]),
+  },
+};
 </script>
 
 <style scoped lang="less">
-.common-layout{
+.common-layout {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: auto;
   background-color: @layout-body-background;
-  background-image: url('../assets/img/bg.png');
+  background-image: url("../assets/img/bg.png");
   background-repeat: no-repeat;
-  background-size: 100% 92%;
-  .content{
+  background-size: 100% 100%;
+  object-fit: contain;
+  .content {
     padding: 32px 0;
     flex: 1;
-    @media (min-width: 768px){
+    @media (min-width: 768px) {
       padding: 28px 0 28px;
     }
   }

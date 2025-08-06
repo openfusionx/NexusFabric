@@ -21,9 +21,9 @@
 
     .ant-modal-confirm-title {
         padding: 0 32px;
-        font-size: 16px;
-        color: #333;
-        font-weight: 500;
+        font-size: 14px;
+        color: #000;
+        font-weight: 600;
     }
 
     .ant-modal-confirm-body-wrapper {
@@ -46,7 +46,7 @@
 
     &>label {
         font-size: 14px;
-        color: rgba(0, 0, 0, 0.65);
+        color: #161A24 !important;
 
         &:before {
             margin-right: 5px;
@@ -63,21 +63,48 @@
     display: flex;
     align-items: center;
     padding: 0px 20px;
-    justify-content: flex-end;
-    margin: 0 10px 20px
+    justify-content: center;
+    margin: 0 10px 20px;
+    .ant-btn{
+        width:88px;
+    }
+    .ant-btn-primary {
+    background-color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn:hover {
+    color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn-primary:hover {
+    color: #fff;
+  }
+}
+.ant-modal-confirm-content{
+    .ant-input{
+        height:40px;
+    }
+    .ant-select-selection--single{
+         height:40px;
+    }
+    #alertAdvice{
+        height:80px;
+    }
+    .ant-select-selection__rendered{
+        line-height: 40px;
+    }
 }
 
 /*列表表格样式*/
 body {
     .ant-table th {
         // border-right: 1px solid #fff;
-        border-bottom: 1px solid #E3E4E6;
+        border-bottom: 0px solid #D6E7EF;
     }
     .ant-table-thead>tr>th {
-        background: #CCE1FE;
+        background: #D6E7EF;
         padding: 7px 16px 6px !important;
-        border-right: 1px solid #fff;
-
+        color: #222D3C;
         &:last-child {
             border-right: none;
         }
@@ -88,19 +115,19 @@ body {
     }
 
     .ant-table-tbody>tr:not(.ant-table-expanded-row):nth-child(2n) {
-        background: rgba(232, 238, 248, .4);
+        background: #F9FAFC;
     }
-
     .ant-table-tbody>tr>td {
         // padding: 13px 16px 12px;
         padding: 15px 16px 14px;
-        border-bottom: 0px solid #E3E4E6;
-        color: rgba(0, 0, 0, 0.65);
+        color: #4A5667;
+        border:none;
     }
-
-    .ant-table {
-        border: none;
-        border-bottom: none;
+    .ant-table-tbody tr:hover{
+        background-color: #EFF3FA !important;
+    }
+    .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td{
+        background-color: #EFF3FA !important;
     }
 }
 
@@ -114,8 +141,8 @@ body {
 .ant-menu-inline .ant-menu-item {
     margin-bottom: 0px;
     margin-top: 0px;
-    height: 32px;
-    line-height: 32px;
+    height: 40px;
+    line-height: 40px;
 }
 .ant-menu-dark .ant-menu-item-selected>a,
 .ant-menu-dark .ant-menu-item-selected>a:hover {
@@ -123,6 +150,61 @@ body {
 }
 
 .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-sub.ant-menu-inline > .ant-menu-item {
-    height: 32px;
-    line-height: 32px;
+    height: 40px;
+    line-height: 40px;
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+    background-color: #D6E7EF;
+}
+.ant-menu-item-selected > a, .ant-menu-item-selected > a:hover{
+    color:#161A24
+}
+.ant-menu-submenu-selected{
+    color:#161A24;
+}
+.ant-steps-item .ant-steps-item-icon{
+    width:24px;
+    height:24px;
+    line-height:24px;
+    border-radius:50%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border:1px solid #000;
+}
+.ant-steps-item-active .ant-steps-item-icon{
+    border:1px solid #000;
+}
+.ant-steps-item-active .ant-steps-item-icon> .ant-steps-icon{
+    color:#000;
+}
+.ant-steps-item-custom .ant-steps-item-icon > .ant-steps-icon{
+    font-size:12px;
+    color:#000;
+}
+.ant-steps-item-finish .ant-steps-item-icon{
+    border:1px solid #5A9DBE;
+    background-color:#5A9DBE;
+}
+.ant-steps-item-finish .ant-steps-item-icon> .ant-steps-icon{
+    color:#FFF;
+}
+.ant-steps-item-custom.ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon{
+    color:#000;
+}
+.ant-progress-text{
+  display:none;
+}
+.ant-progress-bg {
+  border-radius: 0px !important;
+}
+.ant-progress-status-exception .ant-progress-bg {
+  background-color: #ea5514 !important;
+}
+.ant-progress-inner{
+  border-radius: 0px !important;
+}
+.handler-container.right{
+    display: none;
 }

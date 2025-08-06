@@ -26,40 +26,66 @@
 <template>
   <a-layout-header :class="[headerTheme, 'admin-header']">
     <div :class="['admin-header-wide', layout, pageWidth]">
-      <div v-if="isMobile || layout === 'head'" :class="['logo', isMobile ? null : 'pc', headerTheme]">
+      <div
+        v-if="isMobile || layout === 'head'"
+        :class="['logo', isMobile ? null : 'pc', headerTheme]"
+      >
         <img width="32" src="@/assets/img/logo.png" />
-        <h1 v-if="!isMobile">{{systemName}}</h1>
+        <!-- <h1 v-if="!isMobile">{{systemName}}</h1> -->
       </div>
       <div :class="['logo', theme]">
-        <div class="flex-container">
-          <img src="@/assets/img/logo.png" alt />
-          <h1>{{systemName}}</h1>
+        <div class="header-img">
+          <img src="@/assets/img/logo.png" alt class="header-logo" />
+          <!-- <h1>{{systemName}}</h1> -->
+          <img src="@/assets/img/header-text.png" class="header-text" />
         </div>
       </div>
       <a-divider v-if="isMobile" type="vertical" />
       <!-- <a-icon v-if="layout !== 'head'" class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggleCollapse"/> -->
-      <div v-if="layout !== 'side' && !isMobile" class="admin-header-menu" :style="`width: ${menuWidth};`">
-        <i-menu class="head-menu" :theme="headerTheme" mode="horizontal" :options="menuData" @select="onSelect" />
+      <div
+        v-if="layout !== 'side' && !isMobile"
+        class="admin-header-menu"
+        :style="`width: ${menuWidth};`"
+      >
+        <i-menu
+          class="head-menu"
+          :theme="headerTheme"
+          mode="horizontal"
+          :options="menuData"
+          @select="onSelect"
+        />
       </div>
       <div :class="['admin-header-right', headerTheme]">
         <cluster-setting v-if="isCluster === 'isCluster'" />
-        <alarm-manage  v-if="isCluster === 'isCluster'"/>
+        <alarm-manage v-if="isCluster === 'isCluster'" />
         <a-dropdown v-if="isCluster === 'isCluster'" class="lang header-item">
-          <div style="display: flex;align-items: center;">
-            <span class="system-name">{{currentCluster.name}}</span>
-            <a-icon type="caret-down" style="font-size: 18px;color:#fff" />
+          <div style="display: flex; align-items: center">
+            <span class="system-name">{{ currentCluster.name }}</span>
+            <a-icon type="caret-down" style="font-size: 18px; color: #fff" />
           </div>
-          <a-menu @click="val => changeCluster(val)" :selectedKeys="[currentCluster.clusterId]" slot="overlay">
-            <a-menu-item v-for=" lang in runningCluster" :key="lang.value">{{lang.label}}</a-menu-item>
+          <a-menu
+            @click="(val) => changeCluster(val)"
+            :selectedKeys="[currentCluster.clusterId]"
+            slot="overlay"
+          >
+            <a-menu-item v-for="lang in runningCluster" :key="lang.value">{{
+              lang.label
+            }}</a-menu-item>
           </a-menu>
         </a-dropdown>
         <a-dropdown v-if="isCluster === 'isCluster'" class="lang header-item">
-          <div style="display: flex;align-items: center;">
-            <span class="system-name">{{lang}}</span>
-            <a-icon type="caret-down" style="font-size: 18px;color:#fff" />
+          <div style="display: flex; align-items: center">
+            <span class="system-name">{{ lang }}</span>
+            <a-icon type="caret-down" style="font-size: 18px; color: #fff" />
           </div>
-          <a-menu @click="val => setLang(val.key)" :selected-keys="[lang]" slot="overlay">
-            <a-menu-item v-for=" l in langList" :key="l.key">{{l.key.toLowerCase() + ' ' + l.name}}</a-menu-item>
+          <a-menu
+            @click="(val) => setLang(val.key)"
+            :selected-keys="[lang]"
+            slot="overlay"
+          >
+            <a-menu-item v-for="l in langList" :key="l.key">{{
+              l.key.toLowerCase() + " " + l.name
+            }}</a-menu-item>
           </a-menu>
         </a-dropdown>
         <header-avatar class="header-item" />
@@ -71,13 +97,13 @@
 <script>
 import HeaderAvatar from "./HeaderAvatar";
 import IMenu from "@/components/menu/menu";
-import ClusterSetting from './clusterSetting';
-import AlarmManage from './alarmManage.vue'
+import ClusterSetting from "./clusterSetting";
+import AlarmManage from "./alarmManage.vue";
 import { mapState, mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "AdminHeader",
-  components: { IMenu, HeaderAvatar, ClusterSetting  ,AlarmManage},
+  components: { IMenu, HeaderAvatar, ClusterSetting, AlarmManage },
   props: ["collapsed", "menuData"],
   data() {
     return {
@@ -90,7 +116,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('setting', ['isCluster', 'runningCluster', 'clusterId']),
+    ...mapGetters("setting", ["isCluster", "runningCluster", "clusterId"]),
     ...mapState("setting", [
       "theme",
       "isMobile",
@@ -119,13 +145,16 @@ export default {
       const extraWidth = searchActive ? "600px" : "400px";
       return `calc(${headWidth} - ${extraWidth})`;
     },
-    currentCluster () {
-      let arr = this.runningCluster.filter(item => item.value === Number(this.clusterId)) || []
+    currentCluster() {
+      let arr =
+        this.runningCluster.filter(
+          (item) => item.value === Number(this.clusterId)
+        ) || [];
       return {
-        name: arr.length > 0 ? arr[0].label : '',
-        clusterId: this.clusterId
-      }
-    }
+        name: arr.length > 0 ? arr[0].label : "",
+        clusterId: this.clusterId,
+      };
+    },
   },
   methods: {
     toggleCollapse() {
@@ -135,12 +164,12 @@ export default {
       this.$emit("menuSelect", obj);
     },
     // 切换运行中的集群
-    changeCluster (val) {
-      if (this.clusterId === val.key) return false
-      this.setClusterId(val.key)
+    changeCluster(val) {
+      if (this.clusterId === val.key) return false;
+      this.setClusterId(val.key);
       // todo: 是否需要立马去刷新服务列表
-      this.$store.dispatch('setting/getRunningClusterList')
-      if (window.location.hash !== '#/overview') this.$router.push("/overview");
+      this.$store.dispatch("setting/getRunningClusterList");
+      if (window.location.hash !== "#/overview") this.$router.push("/overview");
     },
     ...mapMutations("setting", ["setLang", "setClusterId"]),
   },
@@ -155,5 +184,15 @@ export default {
   letter-spacing: 0.39px;
   font-weight: 500;
   margin-right: 5px;
+}
+.header-img {
+  height: 47px;
+  display: flex;
+  align-items: center;
+}
+.admin-header .admin-header-wide .admin-header-right {
+  height: 47px;
+  display: flex;
+  align-items: center;
 }
 </style>

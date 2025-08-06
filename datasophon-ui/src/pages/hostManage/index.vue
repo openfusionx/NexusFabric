@@ -26,18 +26,53 @@
 
 <template>
   <div class="host-manage steps">
-    <a-card class="mgb16 card-shadow">
-      <a-row type="flex" align="middle">
+    <a-card class="card-shadow">
+      <a-row type="flex" align="middle" class="row-bottom">
         <a-col :span="16">
-          <a-input placeholder="请输入IP" class="w180 mgr12" @change="(value) => getVal(value, 'ip')" allowClear />
-          <a-input placeholder="请输入主机名" class="w180 mgr12" @change="(value) => getVal(value, 'hostname')" allowClear />
-          <a-select placeholder="请选择Cpu架构" class="w180 mgr12" :allowClear="true" @change="(value) => getVal(value, 'cpuArchitecture')">
-            <a-select-option :value="item.id" v-for="(item,index) in cpuArchitecture" :key="index">{{item.key}}</a-select-option>
+          <a-input
+            placeholder="请输入IP"
+            class="w180 mgr12"
+            @change="(value) => getVal(value, 'ip')"
+            allowClear
+          />
+          <a-input
+            placeholder="请输入主机名"
+            class="w180 mgr12"
+            @change="(value) => getVal(value, 'hostname')"
+            allowClear
+          />
+          <a-select
+            placeholder="请选择Cpu架构"
+            class="w180 mgr12"
+            :allowClear="true"
+            @change="(value) => getVal(value, 'cpuArchitecture')"
+          >
+            <a-select-option
+              :value="item.id"
+              v-for="(item, index) in cpuArchitecture"
+              :key="index"
+              >{{ item.key }}</a-select-option
+            >
           </a-select>
-          <a-select placeholder="请选择状态" class="w180 mgr12" :allowClear="true" @change="(value) => getVal(value, 'hostState')">
-            <a-select-option :value="item.id" v-for="(item,index) in hostState" :key="index">{{item.key}}</a-select-option>
+          <a-select
+            placeholder="请选择状态"
+            class="w180 mgr12"
+            :allowClear="true"
+            @change="(value) => getVal(value, 'hostState')"
+          >
+            <a-select-option
+              :value="item.id"
+              v-for="(item, index) in hostState"
+              :key="index"
+              >{{ item.key }}</a-select-option
+            >
           </a-select>
-          <a-button class type="primary" icon="search" @click="onSearch"></a-button>
+          <a-button
+            class
+            type="primary"
+            icon="search"
+            @click="onSearch"
+          ></a-button>
         </a-col>
         <a-col :span="8" style="text-align: right">
           <a-dropdown>
@@ -79,13 +114,32 @@
           </a-dropdown> -->
         </a-col>
       </a-row>
-    </a-card>
-    <a-card class="card-shadow">
       <div class="table-info steps-body">
-        <a-table @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" rowKey="id" :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" :pagination="pagination"></a-table>
+        <a-table
+          @change="tableChange"
+          :columns="columns"
+          :loading="loading"
+          :dataSource="dataSource"
+          rowKey="id"
+          :rowSelection="{
+            selectedRowKeys: selectedRowKeys,
+            onChange: onSelectChange,
+          }"
+          :pagination="pagination"
+        ></a-table>
       </div>
       <!-- 配置集群的modal -->
-      <a-modal v-if="visible" title :visible="visible" :maskClosable="false" :closable="false" :width="1576" :confirm-loading="confirmLoading" @cancel="handleCancel" :footer="null">
+      <a-modal
+        v-if="visible"
+        title
+        :visible="visible"
+        :maskClosable="false"
+        :closable="false"
+        :width="1576"
+        :confirm-loading="confirmLoading"
+        @cancel="handleCancel"
+        :footer="null"
+      >
         <Steps :clusterId="clusterId" stepsType="hostManage" />
       </a-modal>
     </a-card>
@@ -99,7 +153,7 @@ import Steps from "@/components/steps";
 import AistributionRack from "./distributionRack.vue";
 import RoleModal from "./roleModal.vue";
 import AddLabel from "./addLabel.vue";
-import AddRack from './addRack.vue'
+import AddRack from "./addRack.vue";
 export default {
   name: "HOSTMANAGE",
   components: { Steps },
@@ -171,11 +225,12 @@ export default {
                       : row.hostState === 2
                       ? "stop-status"
                       : row.hostState === 3
-                      ? "gaojing"
+                      ? "warn"
                       : ""
                   }
                   class={[
                     "mgr6",
+                    "status-icon",
                     row.hostState === 1
                       ? "success-status-color"
                       : row.hostState === 2
@@ -223,13 +278,7 @@ export default {
                 <a-progress
                   class="use-progress"
                   strokeLinecap="square"
-                  strokeColor={
-                    percent < 70
-                      ? "#01AA72"
-                      : percent < 90
-                      ? "#FF7E01"
-                      : "#FF5656"
-                  }
+                  strokeColor={this.getStrokeColor(percent)}
                   percent={percent}
                   size="small"
                   status="active"
@@ -258,13 +307,7 @@ export default {
                 <a-progress
                   class="use-progress"
                   strokeLinecap="square"
-                  strokeColor={
-                    percent < 70
-                      ? "#01AA72"
-                      : percent < 90
-                      ? "#FF7E01"
-                      : "#FF5656"
-                  }
+                  strokeColor={this.getStrokeColor(percent)}
                   percent={percent}
                   size="small"
                   status="active"
@@ -404,7 +447,7 @@ export default {
         cpuArchitecture: this.changeCpuArchitecture
           ? this.params.cpuArchitecture || ""
           : "",
-        ip: this.params.ip || '',
+        ip: this.params.ip || "",
         hostState: this.changeUsername ? this.params.hostState || "" : "",
       };
       this.$axiosPost(global.API.getHostListByPage, params).then((res) => {
@@ -416,12 +459,17 @@ export default {
     handleRackClick(e) {
       this.addRack(e.key);
     },
-    addRack(key){
+    addRack(key) {
       const self = this;
       let width = 520;
-      let title = key === 'add' ? "添加机架" : key === 'del' ? "删除机架" : '分配机架';
+      let title =
+        key === "add" ? "添加机架" : key === "del" ? "删除机架" : "分配机架";
       let content = (
-        <AddRack type={key} hostIds={this.selectedRowKeys} callBack={() => self.refresh()} />
+        <AddRack
+          type={key}
+          hostIds={this.selectedRowKeys}
+          callBack={() => self.refresh()}
+        />
       );
       this.$confirm({
         width: width,
@@ -436,12 +484,17 @@ export default {
     handleLabelClick(e) {
       this.addLabel(e.key);
     },
-    addLabel(key){
+    addLabel(key) {
       const self = this;
       let width = 520;
-      let title = key === 'add' ? "添加标签" : key === 'del' ? "删除标签" : '分配标签';
+      let title =
+        key === "add" ? "添加标签" : key === "del" ? "删除标签" : "分配标签";
       let content = (
-        <AddLabel type={key} hostIds={this.selectedRowKeys} callBack={() => self.refresh()} />
+        <AddLabel
+          type={key}
+          hostIds={this.selectedRowKeys}
+          callBack={() => self.refresh()}
+        />
       );
       this.$confirm({
         width: width,
@@ -454,9 +507,9 @@ export default {
       });
     },
     refresh() {
-      debugger
-      this.selectedRowKeys = []
-      this.onSearch()
+      debugger;
+      this.selectedRowKeys = [];
+      this.onSearch();
     },
     handleMenuClick(key) {
       if (this.selectedRowKeys.length < 1) {
@@ -467,31 +520,32 @@ export default {
         this.delExample();
         return false;
       }
-      if (key.key === 'handLabel') {
-        this.addLabel(key.key)
-        return false
+      if (key.key === "handLabel") {
+        this.addLabel(key.key);
+        return false;
       }
-      if (key.key === 'handRack') {
-        this.addRack(key.key)
-        return false
+      if (key.key === "handRack") {
+        this.addRack(key.key);
+        return false;
       }
       if (key.key === "handAgent") {
         this.doConfirm("重新安装 Worker", this.handAgent);
         return false;
       }
-      if(key.key === "handStartService") {
+      if (key.key === "handStartService") {
         this.doConfirm("启动该主机服务", this.handStartService);
         return false;
       }
-      if(key.key === "handStopService") {
+      if (key.key === "handStopService") {
         this.doConfirm("停止该主机服务", this.handStopCommand);
         return false;
       }
-      if(key.key === "handStartHost") {
+      if (key.key === "handStartHost") {
         // 启动主机 Worker
-        this.doConfirm("启动该主机 Worker", this.handStartHost)
+        this.doConfirm("启动该主机 Worker", this.handStartHost);
         return false;
-      } if (key.key === "handStopHost") {
+      }
+      if (key.key === "handStopHost") {
         // 停止主机 Worker
         this.doConfirm("停止该主机 Worker", this.handStopHost);
         return false;
@@ -522,66 +576,80 @@ export default {
         clusterHostIds: this.hostnames.join(","),
         commandType: "start",
       };
-      this.$axiosPost(global.API.generateHostAgentCommand, params).then((resp) => {
-        if (resp.code === 200) {
-          this.$message.success("操作成功");
-        } else {
-          this.$message.error(resp.msg);
+      this.$axiosPost(global.API.generateHostAgentCommand, params).then(
+        (resp) => {
+          if (resp.code === 200) {
+            this.$message.success("操作成功");
+          } else {
+            this.$message.error(resp.msg);
+          }
         }
-      })
+      );
     },
     handStopHost() {
       let params = {
         clusterHostIds: this.hostnames.join(","),
         commandType: "stop",
       };
-      this.$axiosPost(global.API.generateHostAgentCommand, params).then((resp) => {
-        if (resp.code === 200) {
-          this.$message.success("操作成功");
-        } else {
-          this.$message.error(resp.msg);
+      this.$axiosPost(global.API.generateHostAgentCommand, params).then(
+        (resp) => {
+          if (resp.code === 200) {
+            this.$message.success("操作成功");
+          } else {
+            this.$message.error(resp.msg);
+          }
         }
-      })
+      );
     },
     handStartService() {
-      this.handCommand('start')
+      this.handCommand("start");
     },
     handStopCommand() {
-      this.handCommand('stop')
+      this.handCommand("stop");
     },
-    handCommand(op){
+    handCommand(op) {
       let params = {
         clusterHostIds: this.hostnames.join(","),
         commandType: op,
       };
-      this.$axiosPost(global.API.generateHostServiceCommand, params).then((resp) => {
-        if (resp.code === 200) {
-          this.$message.success(op == 'start' ? "启动 Worker 服务成功" : "停止 Worker 服务成功");
-        } else {
-          this.$message.error(resp.msg);
+      this.$axiosPost(global.API.generateHostServiceCommand, params).then(
+        (resp) => {
+          if (resp.code === 200) {
+            this.$message.success(
+              op == "start" ? "启动 Worker 服务成功" : "停止 Worker 服务成功"
+            );
+          } else {
+            this.$message.error(resp.msg);
+          }
         }
-      })
+      );
     },
     delExample() {
       this.$confirm({
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
           );
         },
         content: (
-          <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              确认删除吗？
+          <div style="margin-top:40px">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              确认<a class="delete-text">删除</a>吗？
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-btns-new"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -609,26 +677,32 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#5a9dbe !important;margin-right:10px"
               />
               提示
             </div>
           );
         },
         content: (
-          <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              { '确认要' + title + '吗？'}
+          <div style="margin-top:40px">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              {"确认要" + title + "吗？"}
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-footer-btns"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
                 onClick={() => {
-                  callbackMethod()
+                  callbackMethod();
                   this.$destroyAll();
                 }}
               >
@@ -682,6 +756,30 @@ export default {
         },
       });
     },
+    getStrokeColor(percent) {
+      if (percent < 70) {
+        return {
+          "0%": "#9CD994",
+          "20%": "#9CD994",
+          "21%": "#74BD6A",
+          "80%": "#74BD6A",
+        };
+      } else if (percent < 90) {
+        return {
+          "0%": "#FFCC72",
+          "20%": "#FFCC72",
+          "21%": "#F6AB28",
+          "80%": "#F6AB28",
+        };
+      } else {
+        return {
+          "0%": "#FF9773",
+          "20%": "#FF9773",
+          "21%": "#F4622E",
+          "80%": "#F4622E",
+        };
+      }
+    },
   },
   mounted() {
     this.getHostListByPage();
@@ -704,13 +802,13 @@ export default {
   .btn-opt {
     border-radius: 1px;
     font-size: 12px;
-    color: #2872e0;
+    color: #5a9dbe;
     letter-spacing: 0;
     font-weight: 400;
     margin: 0 5px;
   }
   .role-name {
-    color: #2872e0;
+    color: #5a9dbe;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
@@ -724,6 +822,36 @@ export default {
   top: 61px;
   .ant-modal-content {
     border-radius: 4px;
+  }
+}
+.status-icon {
+  width: 20px;
+  height: 20px;
+}
+.delete-text {
+  color: #f4622e;
+}
+.ant-modal-confirm-btns-new {
+  .ant-btn-primary {
+    background-color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn:hover {
+    color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn-primary:hover {
+    color: #fff;
+  }
+}
+.tips-content {
+  text-align: center;
+}
+.ant-modal-confirm-footer-btns {
+  display: flex;
+  justify-content: center;
+  .ant-btn {
+    width: 88px;
   }
 }
 </style>

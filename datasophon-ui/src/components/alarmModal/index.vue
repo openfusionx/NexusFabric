@@ -28,7 +28,15 @@
   <div class="alarmModal">
     <div class="table-info steps-body">
       <a-config-provider :locale="zh_CN">
-      <a-table :columns="columns" :loading="loading" :dataSource="dataSource" rowKey="id" :scroll="!alarmAll? {y: 400} : {}" :pagination="alarmAll?pagination:false" @change="tableChange" ></a-table>
+        <a-table
+          :columns="columns"
+          :loading="loading"
+          :dataSource="dataSource"
+          rowKey="id"
+          :scroll="!alarmAll ? { y: 400 } : {}"
+          :pagination="alarmAll ? pagination : false"
+          @change="tableChange"
+        ></a-table>
       </a-config-provider>
     </div>
   </div>
@@ -41,20 +49,20 @@ export default {
   provide() {
     return {
       handleCancel: this.handleCancel,
-      onSearch: () => {}
+      onSearch: () => {},
     };
   },
   props: {
     serviceInstanceId: {
-      Type:Number,
-      default:0
+      Type: Number,
+      default: 0,
     },
-    alarmAll:Boolean
+    alarmAll: Boolean,
   },
   data() {
     return {
       zh_CN,
-      clusterId: Number(localStorage.getItem("clusterId") || -1) ,
+      clusterId: Number(localStorage.getItem("clusterId") || -1),
       dataSource: [],
       loading: false,
       columns: [
@@ -66,11 +74,13 @@ export default {
             return (
               <span class="flex-container">
                 <svg-icon
-                  icon-class='gaojing'
+                  icon-class="warn"
                   class={[
                     "mgr6 top-2",
-                    row.alertLevel === 'warning'
-                      ? "configured-status-color" : "error-status-color"
+                    "status-icon",
+                    row.alertLevel === "warning"
+                      ? "configured-status-color"
+                      : "error-status-color",
                   ]}
                 />
                 {row.hostname}
@@ -90,9 +100,24 @@ export default {
           key: "alertTargetName",
           dataIndex: "alertTargetName",
         },
-        { title: "告警详情", key: "alertInfo", dataIndex: "alertInfo",ellipsis: true },
-        { title: "告警时间", key: "createTime", dataIndex: "createTime",ellipsis: true },
-        { title: "建议操作", key: "alertAdvice", dataIndex: "alertAdvice",ellipsis: true, }
+        {
+          title: "告警详情",
+          key: "alertInfo",
+          dataIndex: "alertInfo",
+          ellipsis: true,
+        },
+        {
+          title: "告警时间",
+          key: "createTime",
+          dataIndex: "createTime",
+          ellipsis: true,
+        },
+        {
+          title: "建议操作",
+          key: "alertAdvice",
+          dataIndex: "alertAdvice",
+          ellipsis: true,
+        },
       ],
       pagination: {
         total: 0,
@@ -111,7 +136,7 @@ export default {
     },
     getAlertList() {
       this.loading = true;
-      if(!this.alarmAll){
+      if (!this.alarmAll) {
         const params = {
           serviceInstanceId: this.serviceInstanceId,
         };
@@ -121,7 +146,7 @@ export default {
           this.dataSource = res.data;
           // this.pagination.total = res.total;
         });
-      }else{
+      } else {
         const params = {
           clusterId: this.clusterId,
           pageSize: this.pagination.pageSize,
@@ -136,7 +161,7 @@ export default {
     },
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.getAlertList();
     },
   },
@@ -149,7 +174,7 @@ export default {
 
 <style lang="less" scoped>
 .alarmModal {
-  padding:20px 32px;
+  padding: 20px 32px;
   background: #fff;
   .use-progress {
     /deep/ .ant-progress-inner {
@@ -163,7 +188,7 @@ export default {
   .btn-opt {
     border-radius: 1px;
     font-size: 12px;
-    color: #0264c8;
+    color: #5a9dbe;
     letter-spacing: 0;
     font-weight: 400;
     margin: 0 5px;
@@ -177,9 +202,13 @@ export default {
   padding: 0;
 }
 /deep/ .ant-modal {
-  top: 61px;
+  top: 61px !important;
   .ant-modal-content {
     border-radius: 4px;
   }
+}
+.status-icon {
+  width: 28px;
+  height: 28px;
 }
 </style>

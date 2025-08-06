@@ -54,7 +54,18 @@
       </div>
     </div>
     <div class="table-info mgt16 steps-body pdr30">
-      <a-table @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" rowKey="hostname" :pagination="pagination"></a-table>
+      <a-table
+        @change="tableChange"
+        :columns="columns"
+        :loading="loading"
+        :dataSource="dataSource"
+        :rowSelection="{
+          selectedRowKeys: selectedRowKeys,
+          onChange: onSelectChange,
+        }"
+        rowKey="hostname"
+        :pagination="pagination"
+      ></a-table>
     </div>
   </div>
 </template>
@@ -104,24 +115,33 @@ export default {
             return (
               <span>
                 {row.installStateCode === 1 ? (
-                  <a-progress class="progress-warp" percent={text} status="active" />
+                  <a-progress
+                    class="progress-warp"
+                    percent={text}
+                    status="active"
+                  />
                 ) : row.installStateCode === 2 ? (
                   <a-progress class="progress-warp" percent={text} />
                 ) : (
-                  <a-progress class="progress-warp" percent={text} status="exception" />
+                  <a-progress
+                    class="progress-warp"
+                    percent={text}
+                    status="exception"
+                  />
                 )}
               </span>
             );
           },
         },
-        { title: "进度信息", key: "message", dataIndex: "message", width: 120,
+        {
+          title: "进度信息",
+          key: "message",
+          dataIndex: "message",
+          width: 120,
           customRender: (text, row, index) => {
-            return (
-              <span>
-                {text || ''}
-              </span>
-            );
-          } },
+            return <span>{text || ""}</span>;
+          },
+        },
         {
           title: "操作",
           key: "action",
@@ -151,7 +171,7 @@ export default {
     },
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.pollingSearch();
     },
     getAgentList(flag) {
@@ -172,8 +192,8 @@ export default {
     },
     //表格选择
     onSelectChange(selectedRowKeys, row) {
-      let arr = row.filter(item => item.installStateCode !== 3)
-      this.selectedRow = arr
+      let arr = row.filter((item) => item.installStateCode !== 3);
+      this.selectedRow = arr;
       this.selectedRowKeys = selectedRowKeys;
     },
     // 三秒去刷一下
@@ -260,5 +280,14 @@ export default {
   .progress-warp {
     width: 70%;
   }
+}
+/deep/ .ant-progress-text {
+  display: none;
+}
+/deep/ .ant-progress-bg {
+  border-radius: 0px !important;
+}
+/deep/ .ant-progress-status-exception .ant-progress-bg {
+  background-color: #ea5514 !important;
 }
 </style>

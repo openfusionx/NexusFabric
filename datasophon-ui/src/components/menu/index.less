@@ -19,3 +19,27 @@
   border-radius: 50%;
   background-color: @primary-color;
 }
+
+.popover-service {
+  .more-menu-item {
+    width: calc(100% + 32px);
+    height: 30px;
+    margin-left: -16px;
+  }
+  // margin-left: 31px;
+  .more-menu-btn {
+    font-size: 12px;
+    color: #73737f;
+    letter-spacing: 0.39px;
+    line-height: 32px;
+    font-weight: 400;
+    margin-left: 16px;
+  }
+  .more-menu-item:hover {
+    background-color: #f0f2f7;
+  }
+  /deep/ .ant-popover-inner-content {
+    text-align: left;
+    padding-left: 0px !important;
+  }
+}

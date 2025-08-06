@@ -173,7 +173,7 @@ export default {
                 </div>
                 <div>
                   {/* <span class={'circle-point'}></span> */}
-                  <a-popover trigger="hover" placement="rightTop" class="popover-index" overlayClassName="popover-index" content={() => this.getMoreMenu()}>
+                  <a-popover trigger="hover" placement="rightTop" class="popover-service" overlayClassName="popover-service" content={() => this.getMoreMenu()}>
                     <a-icon type="more" />
                   </a-popover>
                 </div>
@@ -187,7 +187,7 @@ export default {
       let arr = [{ name: 'more' }]
       return (
         arr.map((item, index) => {
-          return <div key={index}>
+          return <div key={index} class="more-menu-item">
             <a-button class="more-menu-btn" style="border-width:0px;min-width:100px;" onClick={() => { }}>{item.name}</a-button>
           </div>
         })

@@ -26,14 +26,29 @@
 
 <template>
   <div class="alarm-group">
-    <a-card class="mgb16 card-shadow ">
-      <a-row type="flex" align="middle">
+    <a-card class="card-shadow">
+      <a-row type="flex" align="middle" class="row-bottom">
         <a-col :span="16">
-          <a-input placeholder="请输入告警组名称" v-model="alertGroupName" class="w252 mgr12" allowClear />
-          <a-button class type="primary" icon="search" @click="onSearch"></a-button>
+          <a-input
+            placeholder="请输入告警组名称"
+            v-model="alertGroupName"
+            class="w252 mgr12"
+            allowClear
+          />
+          <a-button
+            class
+            type="primary"
+            icon="search"
+            @click="onSearch"
+          ></a-button>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a-button style="margin-right: 10px;" type="primary" @click="addGroup({})">新建告警组</a-button>
+          <a-button
+            style="margin-right: 10px"
+            type="primary"
+            @click="addGroup({})"
+            >新建告警组</a-button
+          >
           <!-- <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="del">删除</a-menu-item>
@@ -45,12 +60,16 @@
           </a-dropdown>-->
         </a-col>
       </a-row>
-    </a-card>
-
-    <a-card class="card-shadow">
       <div class="table-info steps-body">
         <!-- :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" -->
-        <a-table @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" rowKey="id" :pagination="pagination" ></a-table>
+        <a-table
+          @change="tableChange"
+          :columns="columns"
+          :loading="loading"
+          :dataSource="dataSource"
+          rowKey="id"
+          :pagination="pagination"
+        ></a-table>
       </div>
     </a-card>
   </div>
@@ -71,7 +90,7 @@ export default {
   },
   data() {
     return {
-      alertGroupName: '',
+      alertGroupName: "",
       visible: false,
       confirmLoading: false,
       pagination: {
@@ -130,7 +149,10 @@ export default {
                   查看告警指标
                 </a>
                 <a-divider type="vertical" />
-                <a class="btn-opt" onClick={() => this.delGroup(row)}>
+                <a
+                  class="btn-opt delete-btn"
+                  onClick={() => this.delGroup(row)}
+                >
                   删除
                 </a>
               </span>
@@ -142,21 +164,21 @@ export default {
   },
   watch: {
     clusterId: {
-      handler (val, oldVal) {
+      handler(val, oldVal) {
         if (val !== oldVal) {
-          debugger
-          this.onSearch()
+          debugger;
+          this.onSearch();
         }
       },
-    }
+    },
   },
   computed: {
     ...mapState({
       setting: (state) => state.setting, //深拷贝的意义在于watch里面可以在Watch里面监听他的newval和oldVal的变化
     }),
-    clusterId () {
-      return this.setting.clusterId
-    }
+    clusterId() {
+      return this.setting.clusterId;
+    },
   },
   methods: {
     handleCancel(e) {
@@ -168,7 +190,7 @@ export default {
     },
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.getAlarmGroupList();
     },
     getVal(val, filed) {
@@ -213,10 +235,10 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
@@ -224,10 +246,16 @@ export default {
         },
         content: (
           <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              确认删除吗？
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              确认<a class="delete-text">删除</a>吗？
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-btns-new"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -266,7 +294,7 @@ export default {
         pageSize: this.pagination.pageSize,
         page: this.pagination.current,
         clusterId: this.clusterId || "",
-        alertGroupName:this.alertGroupName
+        alertGroupName: this.alertGroupName,
       };
       this.$axiosPost(global.API.getAlarmGroupList, params).then((res) => {
         this.loading = false;
@@ -293,5 +321,24 @@ export default {
   .ant-modal-content {
     border-radius: 4px;
   }
+}
+.ant-modal-confirm-btns-new {
+  .ant-btn-primary {
+    background-color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn:hover {
+    color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn-primary:hover {
+    color: #fff;
+  }
+}
+.tips-content {
+  text-align: center;
+}
+.delete-text {
+  color: #f4622e;
 }
 </style>

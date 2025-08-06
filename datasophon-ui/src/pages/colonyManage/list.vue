@@ -1,53 +1,122 @@
-
 <template>
-  <div class="card-list card-shadow">
-    <a-list :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource">
+  <div class="card-box">
+    <a-list
+      :grid="{ gutter: 24, lg: 2, md: 2, sm: 1, xs: 1 }"
+      :dataSource="dataSource"
+    >
       <a-list-item slot="renderItem" slot-scope="item">
         <template v-if="item.add">
           <div class="new-btn" @click="addColony({})">
             <div class="add-icon">
-              <svg-icon icon-class="add-cluster" style="font-size: 80px"></svg-icon>
+              <svg-icon
+                icon-class="add-cluster"
+                style="font-size: 80px"
+              ></svg-icon>
             </div>
-            <div>创建集群</div>
+            <div class="add-text">创建集群</div>
           </div>
         </template>
         <template v-else>
-          <div :class="['colony-card', item.clusterStateCode === 2 ? 'colony-running-card' : 'colony-configured-card']">
+          <div :class="['colony-card']">
+            <div :class="['colony-status']">
+              <div
+                :class="[
+                  'colony-status-text',
+                  item.clusterStateCode === 2
+                    ? 'running-status-text'
+                    : item.clusterStateCode === 3
+                    ? 'error-status-text'
+                    : 'configured-status-text',
+                ]"
+              >
+                <svg-icon
+                  :class="[
+                    'colony-status-icon',
+                    item.clusterStateCode === 2
+                      ? 'running-status-color-icon'
+                      : item.clusterStateCode === 3
+                      ? 'error-status-color'
+                      : 'configured-status-color-icon',
+                  ]"
+                  :icon-class="
+                    item.clusterStateCode === 2
+                      ? 'running-status'
+                      : 'configured-status'
+                  "
+                ></svg-icon>
+                <span class="mgl5">{{ item.clusterState }}</span>
+              </div>
+              <a-button
+                type="primary"
+                @click="getInto(item)"
+                :disabled="item.clusterStateCode === 1"
+                >进入</a-button
+              >
+            </div>
             <div class="card-header flex-bewteen-container">
               <div class="flex-container">
-                <div :class="['colony-icon-warp', item.clusterStateCode === 2 ? 'running-status-bg' : 'configured-status-bg']">
-                  <svg-icon :class="['colony-icon', item.clusterStateCode === 2 ? 'running-status-color' : item.clusterStateCode === 3 ? 'error-status-color' : 'configured-status-color']" icon-class="colony"></svg-icon>
-                </div>
                 <div class="colony-title">{{ item.clusterName }}</div>
-              </div>
-              <div :class="['colony-status']">
-                <svg-icon :class="['colony-status-icon', item.clusterStateCode === 2 ? 'running-status-color' : item.clusterStateCode === 3 ? 'error-status-color' : 'configured-status-color']" :icon-class="item.clusterStateCode === 2 ? 'running-status' : 'configured-status'"></svg-icon>
-                <span class="mgl5">{{item.clusterState}}</span>
               </div>
             </div>
             <div class="card-content">
               <div>
                 集群管理员：
-                <span>{{item.userManageName || '-'}}</span>
+                <span>{{ item.userManageName || "-" }}</span>
               </div>
               <div>
                 创建时间：
-                <span>{{item.createTime}}</span>
+                <span>{{ item.createTime }}</span>
               </div>
             </div>
-            <div class="card-footer flex-bewteen-container">
-              <a-button v-if="user && user.userType === 1" type="link" @click="authCluster(item)">授权</a-button>
-              <a-button type="link" @click="addColony(item)" :disabled="item.clusterStateCode === 2">编辑</a-button>
-              <a-button type="link" @click="getInto(item)" :disabled="item.clusterStateCode === 1">进入</a-button>
-              <a-button type="link" :disabled="item.clusterStateCode === 2" @click="configCluster(item)">配置集群</a-button>
-              <a-button type="link" @click="delectColony(item)" :disabled="item.clusterStateCode === 2">删除集群</a-button>
+            <div
+              class="card-footer flex-bewteen-container"
+              style="justify-content: start"
+            >
+              <a-button
+                type="primary"
+                v-if="user && user.userType === 1"
+                @click="authCluster(item)"
+                ghost
+                >授权</a-button
+              >
+              <a-button
+                type="primary"
+                ghost
+                @click="addColony(item)"
+                :disabled="item.clusterStateCode === 2"
+                >编辑</a-button
+              >
+              <a-button
+                type="primary"
+                ghost
+                :disabled="item.clusterStateCode === 2"
+                @click="configCluster(item)"
+                >配置集群</a-button
+              >
+              <a-button
+                @click="delectColony(item)"
+                :disabled="item.clusterStateCode === 2"
+                type="danger"
+                ghost
+                >删除集群</a-button
+              >
             </div>
           </div>
         </template>
       </a-list-item>
     </a-list>
     <!-- 配置集群的modal -->
-    <a-modal v-if="visible" title :visible="visible" :maskClosable="false" :closable="false" :width="1576" :confirm-loading="confirmLoading" @cancel="handleCancel" :footer="null">
+    <a-modal
+      v-if="visible"
+      title
+      :visible="visible"
+      :maskClosable="false"
+      :closable="false"
+      :width="1576"
+      :confirm-loading="confirmLoading"
+      @cancel="handleCancel"
+      :footer="null"
+    >
       <Steps :clusterId="clusterId" />
     </a-modal>
   </div>
@@ -59,14 +128,14 @@ import AuthCluster from "./commponents/authCluster.vue";
 import DelectColony from "./commponents/delectColony.vue";
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import Steps from "@/components/steps";
-import { changeRouter } from '@/utils/changeRouter'
+import { changeRouter } from "@/utils/changeRouter";
 export default {
   name: "COLONYLIST",
   components: { Steps },
   provide() {
     return {
       handleCancel: this.handleCancel,
-      onSearch: null
+      onSearch: null,
     };
   },
   data() {
@@ -87,7 +156,7 @@ export default {
       this.$axiosPost(global.API.getServiceListByCluster, {
         clusterId: row.id,
       }).then((res) => {
-        changeRouter(res.data, row.id)
+        changeRouter(res.data, row.id);
         this.$router.push("/overview");
       });
     },
@@ -122,10 +191,10 @@ export default {
         width: width,
         title: () => {
           return (
-            <div>
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
@@ -149,7 +218,6 @@ export default {
           });
           item["userManageName"] = arr.join(",");
         });
-        console.log(this.dataSource, "2222");
         this.dataSource.push({
           add: true,
         });
@@ -176,12 +244,12 @@ export default {
     // 配置集群
     configCluster(row) {
       this.clusterId = row.id;
-      this.setClusterId(row.id)
+      this.setClusterId(row.id);
       this.visible = true;
     },
     handleCancel(e) {
       this.visible = false;
-      this.getColonyList()
+      this.getColonyList();
     },
   },
   mounted() {
@@ -216,13 +284,12 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   // cursor: pointer;
-  height: 220.48px;
-  padding: 20px 10px 0px;
+  height: auto;
+  padding: 40px;
   background: #fff;
   border: 1px solid rgba(227, 228, 230, 1);
   border-radius: 4px;
   .card-header {
-    padding: 0 10px;
     .colony-icon-warp {
       width: 50px;
       height: 50px;
@@ -236,36 +303,50 @@ export default {
       }
     }
     .colony-title {
-      margin-left: 20px;
-      font-size: 16px;
+      font-size: 24px;
       color: #333333;
       letter-spacing: 0;
       font-weight: 600;
     }
-    .colony-status {
-      .colony-status-icon {
-        font-size: 14px;
-      }
+  }
+  .colony-status {
+    display: flex;
+    justify-content: space-between;
+    .colony-status-icon {
+      font-size: 14px;
     }
   }
+  .colony-status-text {
+    height: 32px;
+    width: auto;
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+  }
+  .running-status-text {
+    background: rgba(116, 189, 106, 0.2);
+  }
+  .configured-status-text {
+    background: rgba(246, 171, 40, 0.2);
+  }
+  .error-status-text {
+    background: #fde0d5;
+  }
   .card-content {
-    margin-left: 70px;
     div {
-      margin-top: 10px;
-      margin-bottom: 6px;
+      margin-top: 20px;
       font-size: 14px;
-      color: #666666;
+      color: #73737f;
       letter-spacing: 0;
       font-weight: 400;
       span {
-        color: #333333;
+        color: #73737f;
         word-break: break-all;
         white-space: normal;
       }
     }
   }
   .card-footer {
-    border-top: 1px solid #e3e4e6;
     height: 50px;
     line-height: 50px;
     /deep/ .ant-btn-link {
@@ -286,6 +367,11 @@ export default {
     .ant-btn-link:not(:last-child):focus {
       border: none;
       border-right: 1px solid#e3e4e6;
+    }
+    /deep/ .ant-btn {
+      margin-right: 10px;
+      width: 120px;
+      border-radius: 4px;
     }
   }
   /deep/ .ant-btn-link:not(.ant-btn-link[disabled]):hover {
@@ -313,21 +399,23 @@ export default {
   justify-content: center;
   border-radius: 2px;
   width: 100%;
-  height: 220.48px;
+  height: auto;
+  padding: 40px;
   border-radius: 2px;
   text-align: center;
   font-size: 16px;
-  border: 1px dashed #e3e4e6;
   cursor: pointer;
+  background: #fff;
   .add-icon {
+    margin-top: 40px;
     // background-image: url("../../assets/img/colony/add-colony.svg");
     // background-size: 100% 100%;
     // margin: 0 auto 20px;
   }
   &:hover {
     color: @primary-color;
-    background: rgba(2, 121, 254, 0.03);
-    border: 1px dashed @primary-color;
+    // background: rgba(2, 121, 254, 0.03);
+    // border: 1px dashed @primary-color;
     .add-icon {
       // background-image: url("../../assets/img/colony/add-colony-hover.svg");
     }
@@ -341,5 +429,21 @@ export default {
   height: 64px;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.card-box {
+  margin-top: 6px;
+}
+.flex-bewteen-container {
+  margin-top: 20px;
+}
+.running-status-color-icon {
+  color: #74bd6a !important;
+}
+.configured-status-color-icon {
+  color: #f6ab28 !important;
+}
+.add-text {
+  margin-top: 20px;
+  height: 100px;
 }
 </style>

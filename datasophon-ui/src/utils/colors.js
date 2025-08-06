@@ -7,13 +7,13 @@ const themeMode = ADMIN.theme.mode
 
 // 获取 ant design 色系
 function getAntdColors(color, mode) {
-  let options = mode && (mode == themeMode.NIGHT) ? {theme: 'dark'} : undefined
+  let options = mode && (mode == themeMode.LIGHT) ? {theme: 'light'} : undefined
   return generate(color, options)
 }
 
 // 获取功能性颜色
 function getFunctionalColors(mode) {
-  let options = mode && (mode == themeMode.NIGHT) ? {theme: 'dark'} : undefined
+  let options = mode && (mode == themeMode.LIGHT) ? {theme: 'light'} : undefined
   let {success, warning, error} = ANTD.primary
   const  {success: s1, warning: w1, error: e1} = Config.theme
   success = success && s1

@@ -26,15 +26,22 @@
 <template>
   <div class="footer">
     <div class="copyright">
-     © 2023 DataSophon
+     @ 2025 YWH-Data v{{ version }}
     </div>
   </div>
 </template>
 
 <script>
+import config from '@/config'
+
 export default {
   name: 'PageFooter',
-  props: ['copyright', 'linkList']
+  props: ['copyright', 'linkList'],
+  data() {
+    return {
+      version: config.setting.version
+    }
+  }
 }
 </script>
 

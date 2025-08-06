@@ -25,25 +25,74 @@
 -->
 <template>
   <div style="padding-top: 10px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
       <a-form-item label="用户名称">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'username',
-            { rules: [{ required: true, message: '用户名称不能为空!' }, { validator: checkName }] },
-          ]" placeholder="请输入用户名称" />
+            {
+              rules: [
+                { required: true, message: '用户名称不能为空!' },
+                { validator: checkName },
+              ],
+            },
+          ]"
+          placeholder="请输入用户名称"
+        />
       </a-form-item>
       <a-form-item label="用户密码">
-        <a-input type="password" :disabled="editFlag" v-decorator="['password',{ rules: [{ required: true, message: '用户密码不能为空!' }] }]" placeholder="请输入用户密码" />
+        <a-input
+          type="password"
+          :disabled="editFlag"
+          v-decorator="[
+            'password',
+            { rules: [{ required: true, message: '用户密码不能为空!' }] },
+          ]"
+          placeholder="请输入用户密码"
+        />
       </a-form-item>
       <a-form-item label="邮    箱">
-        <a-input v-decorator="['email',{ rules: [{ required: true, message: '邮箱不能为空!' },{pattern: new RegExp(/\w{3,}(\.\w+)*@[A-z0-9]+(\.[A-z]{2,5}){1,2}/), message: '请输入正确的邮箱地址'}] }]" placeholder="请输入邮箱" />
+        <a-input
+          v-decorator="[
+            'email',
+            {
+              rules: [
+                { required: true, message: '邮箱不能为空!' },
+                {
+                  pattern: new RegExp(
+                    /\w{3,}(\.\w+)*@[A-z0-9]+(\.[A-z]{2,5}){1,2}/
+                  ),
+                  message: '请输入正确的邮箱地址',
+                },
+              ],
+            },
+          ]"
+          placeholder="请输入邮箱"
+        />
       </a-form-item>
       <a-form-item label="手机号码">
-        <a-input v-decorator="['phone',{ rules: [{ required: true, message: '手机号码不能为空!' }] }]" placeholder="请输入手机号码" />
+        <a-input
+          v-decorator="[
+            'phone',
+            { rules: [{ required: true, message: '手机号码不能为空!' }] },
+          ]"
+          placeholder="请输入手机号码"
+        />
       </a-form-item>
     </a-form>
     <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -125,22 +174,22 @@ export default {
     },
     echoUSer() {
       if (JSON.stringify(this.detail) !== "{}") {
-      // this.editFlag = true;
+        // this.editFlag = true;
         this.form.getFieldsValue(["username", "phone", "password", "email"]);
         this.form.setFieldsValue({
           username: this.detail.username,
           phone: this.detail.phone,
           //password: this.detail.password,
-          password: '',
+          password: "",
           email: this.detail.email,
         });
       } else {
         this.form.getFieldsValue(["username", "phone", "password", "email"]);
         this.form.setFieldsValue({
-          username: '',
-          phone: '',
-          password: '',
-          email: '',
+          username: "",
+          phone: "",
+          password: "",
+          email: "",
         });
       }
     },
@@ -151,4 +200,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.ant-input {
+  height: 40px !important;
+}
+.ant-btn {
+  width: 88px;
+}
 </style>
