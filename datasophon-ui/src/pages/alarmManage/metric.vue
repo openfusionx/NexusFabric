@@ -25,20 +25,57 @@
 -->
 
 <template>
-  <div class="alarm-metric ">
-    <a-card class="mgb16 card-shadow">
-      <a-row type="flex" align="middle">
+  <div class="alarm-metric">
+    <a-card class="card-shadow">
+      <a-row type="flex" align="middle" class="row-bottom">
         <a-col :span="16">
-          <a-input placeholder="请输入指标名称" class="w252 mgr12" @change="(value) => getVal(value, 'quotaName')" allowClear />
-          <a-select placeholder="请选择告警组" class="w252 mgr12" allowClear @change="(value) => getVal(value, 'alertGroupId')">
-            <a-select-option :value="item.id" v-for="(item,index) in groupList" :key="index">{{item.alertGroupName}}</a-select-option>
+          <a-input
+            placeholder="请输入指标名称"
+            class="w252 mgr12"
+            @change="(value) => getVal(value, 'quotaName')"
+            allowClear
+          />
+          <a-select
+            placeholder="请选择告警组"
+            class="w252 mgr12"
+            allowClear
+            @change="(value) => getVal(value, 'alertGroupId')"
+          >
+            <a-select-option
+              :value="item.id"
+              v-for="(item, index) in groupList"
+              :key="index"
+              >{{ item.alertGroupName }}</a-select-option
+            >
           </a-select>
-          <a-button class type="primary" icon="search" @click="onSearch"></a-button>
+          <a-button
+            class
+            type="primary"
+            icon="search"
+            @click="onSearch"
+          ></a-button>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a-button style="margin-right: 10px;" type="primary" @click="handleMenuStart">启用指标</a-button>
-          <a-button style="margin-right: 10px;" type="primary" @click="handleMenuStop">停用指标</a-button>
-          <a-button style="margin-right: 10px;" type="primary" @click="addGroup({})">新建指标</a-button>
+          <a-button
+            style="margin-right: 10px"
+            type="primary"
+            ghost
+            @click="handleMenuStart"
+            >启用指标</a-button
+          >
+          <a-button
+            style="margin-right: 10px"
+            type="danger"
+            ghost
+            @click="handleMenuStop"
+            >停用指标</a-button
+          >
+          <a-button
+            style="margin-right: 10px"
+            type="primary"
+            @click="addGroup({})"
+            >新建指标</a-button
+          >
           <!-- <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="start">启用</a-menu-item>
@@ -52,11 +89,20 @@
           </a-dropdown>-->
         </a-col>
       </a-row>
-    </a-card>
-    <a-card class="card-shadow">
       <div class="table-info steps-body">
         <!-- :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" -->
-        <a-table @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" rowKey="id" :pagination="pagination" :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" ></a-table>
+        <a-table
+          @change="tableChange"
+          :columns="columns"
+          :loading="loading"
+          :dataSource="dataSource"
+          rowKey="id"
+          :pagination="pagination"
+          :rowSelection="{
+            selectedRowKeys: selectedRowKeys,
+            onChange: onSelectChange,
+          }"
+        ></a-table>
       </div>
     </a-card>
   </div>
@@ -138,8 +184,8 @@ export default {
                     row.quotaStateCode === 1
                       ? "success-point"
                       : row.quotaStateCode === 2
-                        ? "error-point"
-                        : "grey-point",
+                      ? "error-point"
+                      : "grey-point",
                   ]}
                 />
                 {text}
@@ -158,7 +204,10 @@ export default {
                   编辑
                 </a>
                 <a-divider type="vertical" />
-                <a class="btn-opt" onClick={() => this.delMetric(row)}>
+                <a
+                  class="btn-opt delete-btn"
+                  onClick={() => this.delMetric(row)}
+                >
                   删除
                 </a>
               </span>
@@ -170,21 +219,21 @@ export default {
   },
   watch: {
     clusterId: {
-      handler (val, oldVal) {
+      handler(val, oldVal) {
         if (val !== oldVal) {
-          debugger
-          this.onSearch()
+          debugger;
+          this.onSearch();
         }
       },
-    }
+    },
   },
   computed: {
     ...mapState({
       setting: (state) => state.setting, //深拷贝的意义在于watch里面可以在Watch里面监听他的newval和oldVal的变化
     }),
-    clusterId () {
-      return this.setting.clusterId
-    }
+    clusterId() {
+      return this.setting.clusterId;
+    },
   },
   methods: {
     handleCancel(e) {
@@ -194,7 +243,7 @@ export default {
     onSelectChange(selectedRowKeys, row) {
       this.selectedRowKeys = selectedRowKeys;
     },
-    handleMenuStop(){
+    handleMenuStop() {
       if (this.selectedRowKeys.length < 1) {
         this.$message.warning("请至少选择一个实例");
         return false;
@@ -203,36 +252,42 @@ export default {
         width: 450,
         title: () => {
           return (
-              <div style="font-size: 22px;">
-                <a-icon
-                    type="question-circle"
-                    style="color:#2F7FD1 !important;margin-right:10px"
-                />
-                提示
-              </div>
+            <div class="tips-title">
+              <a-icon
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
+              />
+              提示
+            </div>
           );
         },
         content: (
-            <div style="margin-top:20px">
-              <div style="padding:0 65px;font-size: 16px;color: #555555;">
-                确认禁用吗？
-              </div>
-              <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
-                <a-button
-                    style="margin-right:10px;"
-                    type="primary"
-                    onClick={() => this.quotaStop()}
-                >
-                  确定
-                </a-button>
-                <a-button
-                    style="margin-right:10px;"
-                    onClick={() => this.$destroyAll()}
-                >
-                  取消
-                </a-button>
-              </div>
+          <div style="margin-top:20px">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              确认禁用吗？
             </div>
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-btns-new"
+            >
+              <a-button
+                style="margin-right:10px;"
+                type="primary"
+                onClick={() => this.quotaStop()}
+              >
+                确定
+              </a-button>
+              <a-button
+                style="margin-right:10px;"
+                onClick={() => this.$destroyAll()}
+              >
+                取消
+              </a-button>
+            </div>
+          </div>
         ),
         icon: () => {
           return <div />;
@@ -240,7 +295,7 @@ export default {
         closable: true,
       });
     },
-    quotaStop(){
+    quotaStop() {
       let params = {
         alertQuotaIds: this.selectedRowKeys.join(","),
         clusterId: this.clusterId,
@@ -254,7 +309,7 @@ export default {
         }
       });
     },
-    handleMenuStart(){
+    handleMenuStart() {
       if (this.selectedRowKeys.length < 1) {
         this.$message.warning("请至少选择一个实例");
         return false;
@@ -263,10 +318,10 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#5a9dbe !important;margin-right:10px"
               />
               提示
             </div>
@@ -274,10 +329,16 @@ export default {
         },
         content: (
           <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
               确认启用吗？
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-footer-btns"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -300,10 +361,10 @@ export default {
         closable: true,
       });
     },
-    quotaStart(){
+    quotaStart() {
       let params = {
         alertQuotaIds: this.selectedRowKeys.join(","),
-        clusterId:this.clusterId
+        clusterId: this.clusterId,
       };
       this.$axiosPost(global.API.quotaStart, params).then((res) => {
         if (res.code === 200) {
@@ -316,7 +377,7 @@ export default {
     },
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.getAlarmMerticList();
     },
     getVal(val, filed) {
@@ -358,10 +419,10 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
@@ -369,10 +430,16 @@ export default {
         },
         content: (
           <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              确认删除吗？
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              确认<a class="delete-text">删除</a>吗？
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-btns-new"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -468,9 +535,35 @@ export default {
   padding: 0;
 }
 /deep/ .ant-modal {
-  top: 61px;
+  top: 61px !important;
   .ant-modal-content {
     border-radius: 4px;
   }
+}
+.ant-modal-confirm-btns-new {
+  .ant-btn-primary {
+    background-color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn:hover {
+    color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn-primary:hover {
+    color: #fff;
+  }
+}
+.tips-content {
+  text-align: center;
+}
+.ant-modal-confirm-footer-btns {
+  display: flex;
+  justify-content: center;
+  .ant-btn {
+    width: 88px;
+  }
+}
+.delete-text {
+  color: #f4622e;
 }
 </style>

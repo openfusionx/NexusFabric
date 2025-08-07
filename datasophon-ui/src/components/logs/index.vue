@@ -25,35 +25,30 @@
 -->
 <template>
   <div class="logs-container">
-    <Editor :propsCode="logData" ref="child"/>
+    <Editor :propsCode="logData" ref="child" />
     <div v-if="!hideCancel" class="footer">
       <a-button class="mgr10" @click="getModal">刷新</a-button>
     </div>
   </div>
 </template>
 <script>
-
 import Editor from "@/components/editor";
 
 export default {
   name: "LogsContainer",
   components: {
-    Editor
+    Editor,
   },
   props: { logData: String, hideCancel: Boolean },
   data() {
-    return {
-    };
+    return {};
   },
-  watch: {
-    
-  },
-  computed: {
-  },
+  watch: {},
+  computed: {},
   methods: {
     getModal() {
-      this.$emit('getLog');
-      
+      this.$emit("getLog");
+
       this.$refs.child.handleCancel();
     },
   },
@@ -67,7 +62,7 @@ export default {
   flex-direction: column;
   .footer {
     // width: 1300px;
-    margin: 0 100px;
+    // margin: 0 100px;
     height: 64px;
     background: rgba(242, 244, 247, 0.5);
     display: flex;
@@ -77,7 +72,9 @@ export default {
       width: 86px;
     }
     /deep/
-      .ant-btn.ant-btn-loading:not(.ant-btn-circle):not(.ant-btn-circle-outline):not(.ant-btn-icon-only) {
+      .ant-btn.ant-btn-loading:not(.ant-btn-circle):not(
+        .ant-btn-circle-outline
+      ):not(.ant-btn-icon-only) {
       padding-left: 20px;
     }
   }

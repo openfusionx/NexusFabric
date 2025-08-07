@@ -25,106 +25,94 @@
 -->
 <template>
   <div class="example-page">
-    <a-card class="mgb16 card-shadow">
-      <a-row
-        type="flex"
-        align="middle"
-      >
-        <a-col :span="16">
-          <a-input
-            placeholder="请输入主机名"
-            class="w180 mgr12"
-            @change="(value) => getVal(value, 'hostname')"
-            :allowClear='true'
-          />
-          <a-select
-            placeholder="请选择角色类型"
-            class="w180 mgr12"
-            allowClear
-            @change="(value) => getVal(value, 'serviceRoleName')"
-          >
-            <a-select-option
-              :value="item.serviceRoleName"
-              v-for="(item,index) in cateList"
-              :key="index"
-            >{{item.serviceRoleName}}</a-select-option>
-          </a-select>
-          <a-select
-            placeholder="请选择角色组"
-            class="w180 mgr12"
-            :allowClear='true'
-            @change="(value) => getVal(value, 'roleGroupId')"
-          >
-            <a-select-option
-              :value="item.id"
-              v-for="(item,index) in groupList"
-              :key="index"
-            >{{item.roleGroupName}}</a-select-option>
-          </a-select>
-          <a-select
-            placeholder="请选择状态"
-            class="w180 mgr12"
-            :allowClear='true'
-            @change="(value) => getVal(value, 'serviceRoleState')"
-          >
-            <a-select-option
-              :value="item.id"
-              v-for="(item,index) in serviceRoleState"
-              :key="index"
-            >{{item.key}}</a-select-option>
-          </a-select>
-          <a-button
-            class
-            type="primary"
-            icon="search"
-            @click="onSearch"
-          ></a-button>
-        </a-col>
-        <a-col
-          :span="8"
-          style="text-align: right"
+    <a-row type="flex" align="middle" class="row-bottom">
+      <a-col :span="16">
+        <a-input
+          placeholder="请输入主机名"
+          class="w180 mgr12"
+          @change="(value) => getVal(value, 'hostname')"
+          :allowClear="true"
+        />
+        <a-select
+          placeholder="请选择角色类型"
+          class="w180 mgr12"
+          allowClear
+          @change="(value) => getVal(value, 'serviceRoleName')"
         >
-          <a-dropdown>
-            <a-menu
-              slot="overlay"
-              @click="handleMenuClick"
+          <a-select-option
+            :value="item.serviceRoleName"
+            v-for="(item, index) in cateList"
+            :key="index"
+            >{{ item.serviceRoleName }}</a-select-option
+          >
+        </a-select>
+        <a-select
+          placeholder="请选择角色组"
+          class="w180 mgr12"
+          :allowClear="true"
+          @change="(value) => getVal(value, 'roleGroupId')"
+        >
+          <a-select-option
+            :value="item.id"
+            v-for="(item, index) in groupList"
+            :key="index"
+            >{{ item.roleGroupName }}</a-select-option
+          >
+        </a-select>
+        <a-select
+          placeholder="请选择状态"
+          class="w180 mgr12"
+          :allowClear="true"
+          @change="(value) => getVal(value, 'serviceRoleState')"
+        >
+          <a-select-option
+            :value="item.id"
+            v-for="(item, index) in serviceRoleState"
+            :key="index"
+            >{{ item.key }}</a-select-option
+          >
+        </a-select>
+        <a-button
+          class
+          type="primary"
+          icon="search"
+          @click="onSearch"
+        ></a-button>
+      </a-col>
+      <a-col :span="8" style="text-align: right">
+        <a-dropdown>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item key="start">启动</a-menu-item>
+            <a-menu-item key="stop">停止</a-menu-item>
+            <a-menu-item key="reStart">重启</a-menu-item>
+            <a-menu-item
+              key="decommission"
+              v-show="serviceId == 36 || serviceId == 37"
+              >退役</a-menu-item
             >
-              <a-menu-item key="start">启动</a-menu-item>
-              <a-menu-item key="stop">停止</a-menu-item>
-              <a-menu-item key="reStart">重启</a-menu-item>
-              <a-menu-item
-                key="decommission"
-                v-show="serviceId==36||serviceId==37"
-              >退役</a-menu-item>
-              <a-menu-item key="roleGroup">分配角色组</a-menu-item>
-              <a-menu-item key="del">删除</a-menu-item>
-            </a-menu>
-            <a-button
-              class="mgr12"
-              type="primary"
-            >
-              选择操作
-              <a-icon type="down" />
-            </a-button>
-          </a-dropdown>
-          <a-button
-            type="primary"
-            @click="addExample"
-            class="mgr12"
-          >添加新实例</a-button>
-          <a-button
-            type="primary"
-            @click="addCharacter({})"
-          >添加角色组</a-button>
-        </a-col>
-      </a-row>
-    </a-card>
+            <a-menu-item key="roleGroup">分配角色组</a-menu-item>
+            <a-menu-item key="del">删除</a-menu-item>
+          </a-menu>
+          <a-button class="mgr12" type="primary">
+            选择操作
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
+        <a-button type="primary" @click="addExample" class="mgr12"
+          >添加新实例</a-button
+        >
+        <a-button type="primary" @click="addCharacter({})">添加角色组</a-button>
+      </a-col>
+    </a-row>
     <a-table
       :columns="loadTable()"
       @change="tableChange"
       :loading="loading"
       class="release-table-custom"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{
+        selectedRowKeys: selectedRowKeys,
+        onChange: onSelectChange,
+      }"
       :dataSource="dataSources"
       rowKey="id"
       :pagination="pagination"
@@ -161,14 +149,16 @@
       <a-button
         @click="handleLogCancel"
         class="mgb16"
-        style="height: 28px;position: absolute;right: 20px;top:15px;z-index:2"
+        style="
+          height: 28px;
+          position: absolute;
+          right: 20px;
+          top: 15px;
+          z-index: 2;
+        "
         icon="close"
       />
-      <LOGS
-        :logData="logData"
-        @getLog="getLog"
-        :logsVisible="logsVisible"
-      />
+      <LOGS :logData="logData" @getLog="getLog" :logsVisible="logsVisible" />
     </a-modal>
   </div>
 </template>
@@ -185,13 +175,13 @@ export default {
   props: {
     serviceId: String,
   },
-  provide () {
+  provide() {
     return {
       handleCancel: this.handleCancel,
       onSearch: this.onSearch,
     };
   },
-  data () {
+  data() {
     return {
       params: {},
       logsVisible: false,
@@ -238,39 +228,44 @@ export default {
       exampleId: "",
       changeRoleState: false,
       changeRoleName: false,
-      changeGroupName: false
+      changeGroupName: false,
     };
   },
   methods: {
     ...mapMutations("setting", ["showClusterSetting"]),
     ...mapState("setting", ["menuData"]),
-    handleLogCancel () {
+    handleLogCancel() {
       this.logsVisible = false;
     },
-    getVal (val, filed) {
+    getVal(val, filed) {
       if (filed === "serviceRoleState") this.changeRoleState = true;
       if (filed === "roleGroupId") this.changeGroupName = true;
       if (filed === "serviceRoleName") this.changeRoleName = true;
       this.params[`${filed}`] =
-        filed === "serviceRoleState" ? val : filed === "roleGroupId" ? val : filed === "serviceRoleName" ? val : val.target.value
+        filed === "serviceRoleState"
+          ? val
+          : filed === "roleGroupId"
+          ? val
+          : filed === "serviceRoleName"
+          ? val
+          : val.target.value;
     },
-    getServiceRoleType () {
+    getServiceRoleType() {
       const params = {
         serviceInstanceId: this.$route.params.serviceId || "",
-      }
+      };
       //角色组类型
       this.$axiosPost(global.API.getServiceRoleType, params).then((res) => {
-        if (res.code !== 200) return
-        this.cateList = res.data
-      }
-      )
+        if (res.code !== 200) return;
+        this.cateList = res.data;
+      });
       //角色组列表
       this.$axiosPost(global.API.getRoleGroupList, params).then((res) => {
-        if (res.code !== 200) return  //this.$message.error('获取角色组列表失败')
-        this.groupList = res.data
-      })
+        if (res.code !== 200) return; //this.$message.error('获取角色组列表失败')
+        this.groupList = res.data;
+      });
     },
-    handleMenuClick (key) {
+    handleMenuClick(key) {
       if (key.key === "del") {
         this.delExample();
         return false;
@@ -281,7 +276,7 @@ export default {
       }
       this.optServices(key);
     },
-    delExample () {
+    delExample() {
       if (this.selectedRowKeys.length < 1) {
         this.$message.warning("请至少选择一个实例");
         return false;
@@ -290,21 +285,27 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
           );
         },
         content: (
-          <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              确认删除吗？
+          <div style="margin-top:40px">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              确认<a class="delete-text">删除</a>吗？
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-btns-new"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -327,7 +328,7 @@ export default {
         closable: true,
       });
     },
-    confirmDelExample () {
+    confirmDelExample() {
       let params = {
         serviceRoleInstancesIds: this.selectedRowKeys.join(","),
       };
@@ -340,7 +341,7 @@ export default {
         }
       });
     },
-    optServices (item) {
+    optServices(item) {
       if (this.selectedRowKeys.length < 1) {
         this.$message.warning("请至少选择一个实例");
         return false;
@@ -349,9 +350,9 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
+                type="exclamation-circle"
                 style="color:#2F7FD1 !important;margin-right:10px"
               />
               提示
@@ -359,11 +360,27 @@ export default {
           );
         },
         content: (
-          <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              {'确认' + (item.key == 'start' ? '启动' : item.key == 'stop' ? '停止' : item.key == 'reStart' ? '重启' : item.key == 'decommission' ? '退役' : "") + '吗？'}
+          <div style="margin-top:40px">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              {"确认" +
+                (item.key == "start"
+                  ? "启动"
+                  : item.key == "stop"
+                  ? "停止"
+                  : item.key == "reStart"
+                  ? "重启"
+                  : item.key == "decommission"
+                  ? "退役"
+                  : "") +
+                "吗？"}
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-footer-btns"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -385,22 +402,19 @@ export default {
         },
         closable: true,
       });
-
     },
-    ensureServices (item) {
+    ensureServices(item) {
       if (item.key === "decommission") {
         let params = {
           serviceRoleInstanceIds: this.selectedRowKeys.join(","),
         };
-        this.$axiosPost(global.API.decommissionNode, params).then(
-          (res) => {
-            if (res.code === 200) {
-              this.$message.success("操作成功");
-              this.pollingSearch();
-              this.selectedRowKeys = [];
-            }
+        this.$axiosPost(global.API.decommissionNode, params).then((res) => {
+          if (res.code === 200) {
+            this.$message.success("操作成功");
+            this.pollingSearch();
+            this.selectedRowKeys = [];
           }
-        );
+        });
       } else {
         let params = {
           clusterId: this.clusterId,
@@ -408,8 +422,8 @@ export default {
             item.key === "stop"
               ? "STOP_SERVICE"
               : item.key === "start"
-                ? "START_SERVICE"
-                : "RESTART_SERVICE",
+              ? "START_SERVICE"
+              : "RESTART_SERVICE",
           serviceInstanceId: this.$route.params.serviceId || "",
           serviceRoleInstancesIds: this.selectedRowKeys.join(","),
         };
@@ -424,9 +438,9 @@ export default {
           }
         );
       }
-      this.$destroyAll()
+      this.$destroyAll();
     },
-    allotCharacter () {
+    allotCharacter() {
       if (this.selectedRowKeys.length < 1) {
         this.$message.warning("请至少选择一个实例");
         return false;
@@ -434,13 +448,19 @@ export default {
       const self = this;
       let width = 520;
       let title = "分配角色组";
-      let serviceId = { id: this.$route.params.serviceId || "" }
-      let roleInstanceIds = this.selectedRowKeys
+      let serviceId = { id: this.$route.params.serviceId || "" };
+      let roleInstanceIds = this.selectedRowKeys;
       let content = (
-        <AddCharacter serviceId={serviceId} callBack={() => {
-          self.pollingSearch();
-          self.getServiceRoleType()
-        }} />
+        <AllotCharacter
+          serviceId={serviceId}
+          roleInstanceIds={roleInstanceIds}
+          callBack={
+            (() => self.pollingSearch(),
+            () => {
+              this.selectedRowKeys = [];
+            })
+          }
+        />
       );
       this.$confirm({
         width: width,
@@ -452,7 +472,7 @@ export default {
         },
       });
     },
-    addExample () {
+    addExample() {
       let serviceName = [];
       let frameServiceId = null;
       const serviceId = this.$route.params.serviceId || "";
@@ -477,13 +497,16 @@ export default {
       };
       this.visible = true;
     },
-    addCharacter () {
+    addCharacter() {
       const self = this;
       let width = 520;
       let title = "新建角色组";
-      let serviceId = { id: this.$route.params.serviceId || "" }
+      let serviceId = { id: this.$route.params.serviceId || "" };
       let content = (
-        <AddCharacter serviceId={serviceId} callBack={() => self.pollingSearch()} />
+        <AddCharacter
+          serviceId={serviceId}
+          callBack={() => self.pollingSearch()}
+        />
       );
       this.$confirm({
         width: width,
@@ -495,10 +518,10 @@ export default {
         },
       });
     },
-    handleCancel (e) {
+    handleCancel(e) {
       this.visible = false;
     },
-    loadTable () {
+    loadTable() {
       let that = this;
       let columns = that.tableColumns;
       return columns.map((item, index) => {
@@ -513,7 +536,10 @@ export default {
               return `${index + 1}`;
             } else if (item.key === "serviceRoleName") {
               return (
-                <span class="flex-container" style="width: 100%;justify-content: space-between;">
+                <span
+                  class="flex-container"
+                  style="width: 100%;justify-content: space-between;"
+                >
                   <div class="flex-container">
                     <span
                       class={[
@@ -521,19 +547,18 @@ export default {
                         record.serviceRoleStateCode === 1
                           ? "success-point"
                           : record.serviceRoleStateCode === 2
-                            ? "error-point"
-                            : "configured-point",
+                          ? "error-point"
+                          : "configured-point",
                       ]}
                     />
                     {record[item.key]}
-                </div>
-                {record.needRestart && 
-                  <div>
-                    <a-icon type="sync" />
                   </div>
-                }
+                  {record.needRestart && (
+                    <div>
+                      <a-icon type="sync" />
+                    </div>
+                  )}
                 </span>
-                
               );
             } else if (item.key === "serviceRoleState") {
               return (
@@ -543,16 +568,17 @@ export default {
                       record.serviceRoleStateCode === 1
                         ? "success-status"
                         : record.serviceRoleStateCode === 2
-                          ? "stop-status"
-                          : "gaojing"
+                        ? "stop-status"
+                        : "warn"
                     }
                     class={[
                       "mgr6",
+                      "status-icon",
                       record.serviceRoleStateCode === 1
                         ? "success-status-color"
                         : record.serviceRoleStateCode === 2
-                          ? "error-status-color"
-                          : "configured-status-color", // 告警的颜色
+                        ? "error-status-color"
+                        : "configured-status-color", // 告警的颜色
                     ]}
                   />
                   {record[item.key]}
@@ -574,27 +600,27 @@ export default {
       });
     },
     //表格选择
-    onSelectChange (selectedRowKeys, row) {
+    onSelectChange(selectedRowKeys, row) {
       this.selectedRowKeys = selectedRowKeys;
     },
-    tableChange (pagination) {
+    tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.pollingSearch();
     },
-    getLog (row) {
+    getLog(row) {
       if (row && row.id) this.exampleId = row.id;
       let exampleId = this.exampleId || row.id;
       this.$axiosPost(global.API.getLog, {
         serviceRoleInstanceId: exampleId,
       }).then((res) => {
-        if (!row) this.$message.success("刷新日志成功")
+        if (!row) this.$message.success("刷新日志成功");
         this.logsVisible = true;
         this.logData = res.data;
       });
     },
-    bindTime () {
-      let exampleId = this.exampleId
+    bindTime() {
+      let exampleId = this.exampleId;
       this.$axiosPost(global.API.getLog, {
         serviceRoleInstanceId: exampleId,
       }).then((res) => {
@@ -602,20 +628,24 @@ export default {
       });
     },
     //   查询
-    onSearch () {
+    onSearch() {
       this.pagination.current = 1;
       this.getExampleList();
     },
-    getExampleList (flag) {
+    getExampleList(flag) {
       if (!flag) this.loading = true;
       const params = {
         pageSize: this.pagination.pageSize,
         page: this.pagination.current,
         serviceInstanceId: this.$route.params.serviceId,
         hostname: this.params.hostname || "",
-        serviceRoleState: this.changeRoleState ? this.params.serviceRoleState || "" : "",
+        serviceRoleState: this.changeRoleState
+          ? this.params.serviceRoleState || ""
+          : "",
         roleGroupId: this.changeGroupName ? this.params.roleGroupId || "" : "",
-        serviceRoleName: this.changeRoleName ? this.params.serviceRoleName || "" : ""
+        serviceRoleName: this.changeRoleName
+          ? this.params.serviceRoleName || ""
+          : "",
       };
       this.$axiosPost(global.API.instanceList, params).then((res) => {
         this.loading = false;
@@ -625,7 +655,7 @@ export default {
         }
       });
     },
-    pollingSearch () {
+    pollingSearch() {
       this.getExampleList(); // 先立马刷一次
       let self = this;
       if (self.timer) clearInterval(self.timer);
@@ -636,33 +666,32 @@ export default {
   },
   watch: {
     logsVisible: {
-      handler (val) {
+      handler(val) {
         if (val) {
           this.refreshData = setInterval(() => {
-            this.bindTime()
+            this.bindTime();
           }, 10000);
         } else {
           clearInterval(this.refreshData);
           this.refreshData = null;
         }
-
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
   },
-  mounted () {
+  mounted() {
     this.pollingSearch();
-    this.getServiceRoleType()
+    this.getServiceRoleType();
   },
-  activated () {
+  activated() {
     clearInterval(this.timer);
     this.pollingSearch();
   },
-  deactivated () {
+  deactivated() {
     clearInterval(this.timer);
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.timer);
     clearInterval(this.refreshData);
     this.refreshData = null;
@@ -708,6 +737,36 @@ export default {
   top: 61px;
   .ant-modal-content {
     border-radius: 4px;
+  }
+}
+.status-icon {
+  width: 20px;
+  height: 20px;
+}
+.ant-modal-confirm-footer-btns {
+  display: flex;
+  justify-content: center;
+  .ant-btn {
+    width: 88px;
+  }
+}
+.tips-content {
+  text-align: center;
+}
+.delete-text {
+  color: #f4622e;
+}
+.ant-modal-confirm-btns-new {
+  .ant-btn-primary {
+    background-color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn:hover {
+    color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn-primary:hover {
+    color: #fff;
   }
 }
 </style>

@@ -31,9 +31,11 @@
       :form="form"
       class="p0-32"
     >
-      <a-form-item :wrapper-col="{ span: 19, offset: 2 }" style="16px;">
+      <a-form-item>
         <div>
-          <span>确认删除当前 {{ sysTypeTxt }}？</span>
+          <span
+            >确认<a class="delete-text">删除</a>当前 {{ sysTypeTxt }}？</span
+          >
         </div>
       </a-form-item>
     </a-form>
@@ -72,8 +74,8 @@ export default {
     handleSubmit(e) {
       let self = this;
       e.preventDefault();
-      this.$axiosPost('/ddh/cluster/user/delete', {
-        id:this.detail.id,
+      this.$axiosPost("/ddh/cluster/user/delete", {
+        id: this.detail.id,
       })
         .then((res) => {
           this.loading = false;
@@ -105,5 +107,29 @@ export default {
 
 .steps-action {
   margin-top: 24px;
+}
+.ant-btn {
+  width: 88px;
+}
+.ant-btn-primary {
+  background-color: #f4622e;
+  border-color: #f4622e;
+}
+.ant-row {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+/deep/ .ant-form-item-control {
+  display: flex;
+  width: 100%;
+  justify-content: center !important;
+}
+.ant-btn:hover {
+  color: #f4622e;
+  border-color: #f4622e;
+}
+.delete-text {
+  color: #f4622e;
 }
 </style>

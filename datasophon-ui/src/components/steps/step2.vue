@@ -28,10 +28,23 @@
   <div class="steps2 steps">
     <div class="steps-title flex-bewteen-container pdr30">
       <span>主机环境校验</span>
-      <a-button type="primary" @click="retryEnvironment('all')">全部重试</a-button>
+      <a-button type="primary" @click="retryEnvironment('all')"
+        >全部重试</a-button
+      >
     </div>
     <div class="table-info mgt16 steps-body pdr30">
-      <a-table @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" rowKey="hostname" :pagination="pagination"></a-table>
+      <a-table
+        @change="tableChange"
+        :columns="columns"
+        :loading="loading"
+        :dataSource="dataSource"
+        :rowSelection="{
+          selectedRowKeys: selectedRowKeys,
+          onChange: onSelectChange,
+        }"
+        rowKey="hostname"
+        :pagination="pagination"
+      ></a-table>
     </div>
   </div>
 </template>
@@ -95,15 +108,16 @@ export default {
                     row.checkResult.code === 10001
                       ? "success-status"
                       : row.checkResult.code === 10000
-                        ? "success-status"
-                        : "error-status"
+                      ? "success-status"
+                      : "error-status"
                   }
                   class={
+                    ("status-icon",
                     row.checkResult.code === 10001
                       ? "success-status-color"
                       : row.checkResult.code === 10000
-                        ? "running-status-color"
-                        : "configured-status-color"
+                      ? "running-status-color"
+                      : "configured-status-color")
                   }
                 />
                 <span class="mgl5">{row.checkResult.msg}</span>
@@ -139,7 +153,7 @@ export default {
   methods: {
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.pollingSearch();
     },
     getEnvironmentList(flag) {
@@ -214,4 +228,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.status-icon {
+  width: 20px;
+  height: 20px;
+}
 </style>

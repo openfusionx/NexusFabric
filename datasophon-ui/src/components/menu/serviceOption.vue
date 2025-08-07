@@ -26,18 +26,35 @@
 -->
 <template>
   <div @click.stop>
-    <a-popover trigger="hover" placement="rightTop" class="popover-service" overlayClassName="popover-service" :content="()=> getMoreOptions()">
+    <a-popover
+      trigger="hover"
+      placement="rightTop"
+      class="popover-service"
+      overlayClassName="popover-service"
+      :content="() => getMoreOptions()"
+    >
       <a-icon type="more" class="cluster-more" style="top: -28px" />
     </a-popover>
     <!-- 配置集群的modal -->
-    <a-modal v-if="visible" title :visible="visible" class="service-option-modal" :maskClosable="false" :closable="false" :width="1576" :confirm-loading="confirmLoading" @cancel="handleCancel" :footer="null">
+    <a-modal
+      v-if="visible"
+      title
+      :visible="visible"
+      class="service-option-modal"
+      :maskClosable="false"
+      :closable="false"
+      :width="1576"
+      :confirm-loading="confirmLoading"
+      @cancel="handleCancel"
+      :footer="null"
+    >
       <Steps :clusterId="clusterId" stepsType="addService" />
     </a-modal>
   </div>
 </template>
 <script>
 import Steps from "@/components/steps";
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from "vuex";
 
 export default {
   provide() {
@@ -73,7 +90,7 @@ export default {
       ];
       return arr.map((item, index) => {
         return (
-          <div key={index}>
+          <div key={index} class="more-menu-item">
             <a
               class="more-menu-btn"
               style="border-width:0px;min-width:100px;"
@@ -101,9 +118,9 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
+                type="exclamation-circle"
                 style="color:#2F7FD1 !important;margin-right:10px"
               />
               提示
@@ -111,11 +128,25 @@ export default {
           );
         },
         content: (
-          <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              {'确认' + (item.key=='startAll'?'启动所有':item.key=='stopAll'?'停止所有':item.key=='restartAll'?'重启所有需要重启的服务':"") +'吗？'}
+          <div style="margin-top:40px">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              {"确认" +
+                (item.key == "startAll"
+                  ? "启动所有"
+                  : item.key == "stopAll"
+                  ? "停止所有"
+                  : item.key == "restartAll"
+                  ? "重启所有需要重启的服务"
+                  : "") +
+                "吗？"}
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-footer-btns"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -137,12 +168,16 @@ export default {
         },
         closable: true,
       });
-    
     },
     openServices(item) {
       let params = {
         clusterId: this.setting.clusterId,
-        commandType: item.key === "stopAll" ? "STOP_SERVICE" : item.key === "startAll" ? "START_SERVICE" : "RESTART_SERVICE",
+        commandType:
+          item.key === "stopAll"
+            ? "STOP_SERVICE"
+            : item.key === "startAll"
+            ? "START_SERVICE"
+            : "RESTART_SERVICE",
         serviceInstanceIds: "",
       };
       let serviceInstanceIds = [];
@@ -165,8 +200,8 @@ export default {
         if (res.code === 200) {
           this.$message.success("操作成功");
           // todo: 打开头部那个setting栏
-          this.$destroyAll()
-          this.showClusterSetting(true)
+          this.$destroyAll();
+          this.showClusterSetting(true);
         }
       });
     },
@@ -175,20 +210,26 @@ export default {
 </script>
 <style lang="less" scoped>
 .popover-service {
+  .more-menu-item {
+    width: calc(100% + 32px);
+    height: 30px;
+    margin-left: -16px;
+  }
   // margin-left: 31px;
   .more-menu-btn {
-    font-size: 14px;
-    color: #555555;
+    font-size: 12px;
+    color: #73737f;
     letter-spacing: 0.39px;
     line-height: 32px;
     font-weight: 400;
-    &:hover {
-      color: @primary-color;
-    }
+    margin-left: 16px;
+  }
+  .more-menu-item:hover {
+    background-color: #f0f2f7;
   }
   /deep/ .ant-popover-inner-content {
     text-align: left;
-    padding: 12px 16px;
+    padding-left: 0px !important;
   }
 }
 .service-option-modal {
@@ -201,5 +242,15 @@ export default {
   /deep/ .ant-modal-content {
     border-radius: 4px;
   }
+}
+.ant-modal-confirm-footer-btns {
+  display: flex;
+  justify-content: center;
+  .ant-btn {
+    width: 88px;
+  }
+}
+.tips-content {
+  text-align: center;
 }
 </style>

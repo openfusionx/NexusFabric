@@ -25,30 +25,62 @@
 -->
 
 <template>
-
-  <a-tabs @change="onSearch">
-    <a-tab-pane :key="item.key" :tab="item.title"  v-for="item in [{title:'用户列表',key:'user'},{title:'用户组列表',key:'userGroup'}]">
-      <div class="user-list">
-        <a-card class="mgb16 card-shadow">
-          <a-row type="flex" align="middle">
-            <a-col :span="22">
-              <a-input placeholder="请输入用户名" v-if="item.key == 'user'" class="w252 mgr12" @change="(value) => getVal(value, 'username')" allowClear />
-              <a-input placeholder="请输入用户组名"  v-if="item.key == 'userGroup'" class="w252 mgr12" @change="(value) => getVal(value, 'groupName')" allowClear />
-              <a-button class type="primary" icon="search" @click="onSearch(item.key)"></a-button>
-            </a-col>
-            <a-col :span="2" style="text-align: right">
-              <a-button style="margin-left: 10px;" type="primary" @click="createUser({},item.key)">{{item.key == "user" ?'添加用户':'添加用户组'}}</a-button>
-            </a-col>
-          </a-row>
-        </a-card>
-        <a-card class="card-shadow">  
-          <div class="table-info steps-body">
-            <a-table @change="(pagination)=>{tableChange(pagination,item.key)}" :columns="item.key == 'user' ?columns : groupColumns" :loading="loading" :dataSource="dataSource" rowKey="id" :pagination="pagination"></a-table>
-          </div>
-        </a-card>  
-      </div>
-    </a-tab-pane>
-  </a-tabs>
+  <a-card class="card-shadow">
+    <a-tabs @change="onSearch">
+      <a-tab-pane
+        :key="item.key"
+        :tab="item.title"
+        v-for="item in [
+          { title: '用户列表', key: 'user' },
+          { title: '用户组列表', key: 'userGroup' },
+        ]"
+      >
+        <a-row type="flex" align="middle" class="row-bottom">
+          <a-col :span="21">
+            <a-input
+              placeholder="请输入用户名"
+              v-if="item.key == 'user'"
+              class="w252 mgr12"
+              @change="(value) => getVal(value, 'username')"
+              allowClear
+            />
+            <a-input
+              placeholder="请输入用户组名"
+              v-if="item.key == 'userGroup'"
+              class="w252 mgr12"
+              @change="(value) => getVal(value, 'groupName')"
+              allowClear
+            />
+            <a-button
+              class
+              type="primary"
+              icon="search"
+              @click="onSearch(item.key)"
+            ></a-button>
+          </a-col>
+          <a-col :span="3" style="text-align: right">
+            <a-button type="primary" @click="createUser({}, item.key)">{{
+              item.key == "user" ? "添加用户" : "添加用户组"
+            }}</a-button>
+          </a-col>
+        </a-row>
+        <div class="table-info steps-body">
+          <a-table
+            @change="
+              (pagination) => {
+                tableChange(pagination, item.key);
+              }
+            "
+            :columns="item.key == 'user' ? columns : groupColumns"
+            :loading="loading"
+            :dataSource="dataSource"
+            rowKey="id"
+            :pagination="pagination"
+          ></a-table>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
+  </a-card>
 </template>
 
 <script>
@@ -71,10 +103,10 @@ export default {
         pageSizeOptions: ["10", "20", "50", "100"],
         showTotal: (total) => `共 ${total} 条`,
       },
-      username:'',
+      username: "",
       dataSource: [],
       loading: false,
-      groupColumns:[
+      groupColumns: [
         {
           title: "序号",
           key: "index",
@@ -106,10 +138,13 @@ export default {
           customRender: (text, row, index) => {
             return (
               <span class="flex-container">
-                  <a class="btn-opt" onClick={() => this.delectUser(row,'userGroup')}>
-                    删除
-                  </a> 
-                </span>
+                <a
+                  class="btn-opt delete-btn"
+                  onClick={() => this.delectUser(row, "userGroup")}
+                >
+                  删除
+                </a>
+              </span>
             );
           },
         },
@@ -151,13 +186,16 @@ export default {
           customRender: (text, row, index) => {
             return (
               <span class="flex-container">
-                  <a class="btn-opt" onClick={() => this.delectUser(row)}>
-                    删除
-                  </a>
-                  {/* <a class="btn-opt" onClick={() => this.delectUser(row)}>
+                <a
+                  class="btn-opt delete-btn"
+                  onClick={() => this.delectUser(row)}
+                >
+                  删除
+                </a>
+                {/* <a class="btn-opt" onClick={() => this.delectUser(row)}>
                     下载认证凭据
                   </a> */}
-                </span>
+              </span>
             );
           },
         },
@@ -168,10 +206,10 @@ export default {
     ...mapGetters("account", ["user"]),
   },
   methods: {
-    tableChange(pagination,key) {
+    tableChange(pagination, key) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
-      this.getUserList(key == 'userGroup' ? key : null);
+      this.pagination.pageSize = pagination.pageSize;
+      this.getUserList(key == "userGroup" ? key : null);
     },
     getVal(val, filed) {
       this.params[`${filed}`] = val.target.value;
@@ -179,18 +217,23 @@ export default {
     //   查询
     onSearch(key) {
       this.pagination.current = 1;
-      this.getUserList(key == 'userGroup' ? key : null);
+      this.getUserList(key == "userGroup" ? key : null);
     },
-    createUser(obj,key) {
+    createUser(obj, key) {
       const self = this;
       let width = 520;
       let title = JSON.stringify(obj) === "{}" ? "添加用户" : "编辑用户";
       let content = (
         <AddUser detail={obj} callBack={() => self.getUserList()} />
       );
-      if(key == 'userGroup'){
+      if (key == "userGroup") {
         title = JSON.stringify(obj) === "{}" ? "添加用户组" : "编辑用户组";
-        content = <AddUserGroup detail={obj} callBack={() => self.getUserList('userGroup')} />
+        content = (
+          <AddUserGroup
+            detail={obj}
+            callBack={() => self.getUserList("userGroup")}
+          />
+        );
       }
       this.$confirm({
         width: width,
@@ -202,7 +245,7 @@ export default {
         },
       });
     },
-    delectUser(obj,key) {
+    delectUser(obj, key) {
       const self = this;
       let width = 400;
       let content = (
@@ -212,17 +255,22 @@ export default {
           callBack={() => self.getUserList()}
         />
       );
-      if(key == 'userGroup'){
-        content = <DelectUserGroup detail={obj} callBack={() => self.getUserList(key == 'userGroup' ? key : null)} />
+      if (key == "userGroup") {
+        content = (
+          <DelectUserGroup
+            detail={obj}
+            callBack={() => self.getUserList(key == "userGroup" ? key : null)}
+          />
+        );
       }
       this.$confirm({
         width: width,
         title: () => {
           return (
-            <div>
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
@@ -242,12 +290,15 @@ export default {
         pageSize: this.pagination.pageSize,
         page: this.pagination.current,
       };
-      if(key){
-        params.groupName =  this.params.groupName?this.params.groupName : ''
-      }else{
-        params.username =  this.params.username?this.params.username:''
+      if (key) {
+        params.groupName = this.params.groupName ? this.params.groupName : "";
+      } else {
+        params.username = this.params.username ? this.params.username : "";
       }
-      this.$axiosPost(key?global.API.getTenantGroup:global.API.getTenant, params).then((res) => {
+      this.$axiosPost(
+        key ? global.API.getTenantGroup : global.API.getTenant,
+        params
+      ).then((res) => {
         this.loading = false;
         console.log(res);
         this.dataSource = res.data;
@@ -267,7 +318,7 @@ export default {
   .btn-opt {
     border-radius: 1px;
     font-size: 12px;
-    color: #0264c8;
+    color: #f4622e;
     letter-spacing: 0;
     font-weight: 400;
     margin: 0 5px;

@@ -25,16 +25,30 @@
 -->
 <template>
   <div style="padding-top: 10px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
       <a-form-item label="机架名称">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'rack',
             { rules: [{ required: true, message: '机架名称不能为空!' }] },
-          ]" placeholder="请输入机架名称" />
+          ]"
+          placeholder="请输入机架名称"
+        />
       </a-form-item>
     </a-form>
     <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -64,7 +78,7 @@ export default {
       },
       form: this.$form.createForm(this),
       loading: false,
-      groupList:[],
+      groupList: [],
     };
   },
   watch: {},
@@ -88,30 +102,27 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           const params = {
-          rack: values.rack,
-          clusterId: this.clusterId,
-        };
-        this.loading = true;
-        const ajaxApi = global.API.saveRack;
-        this.$axiosPost(ajaxApi, params)
-          .then((res) => {
-            this.loading = false;
-            if (res.code === 200) {
-              this.$message.success("保存成功", 2);
-              this.$destroyAll();
-              _this.callBack();
-            }
-          })
-        .catch((err) => {});
-          }
+            rack: values.rack,
+            clusterId: this.clusterId,
+          };
+          this.loading = true;
+          const ajaxApi = global.API.saveRack;
+          this.$axiosPost(ajaxApi, params)
+            .then((res) => {
+              this.loading = false;
+              if (res.code === 200) {
+                this.$message.success("保存成功", 2);
+                this.$destroyAll();
+                _this.callBack();
+              }
+            })
+            .catch((err) => {});
+        }
       });
     },
   },
-  mounted() {
-  },
-  created(){
-  }
+  mounted() {},
+  created() {},
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

@@ -25,85 +25,258 @@
 -->
 <template>
   <div class="common-template steps">
-    <a-form-model ref="formRef" :label-col="labelCol" :wrapper-col="wrapperCol" :model="form" class="form-content mgh160">
+    <a-form-model
+      ref="formRef"
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :model="form"
+      class="form-content mgh160"
+    >
       <div v-for="(item, index) in form.testData" :key="index">
-        <div class="form-item-container" v-if="!['multipleWithKey', 'multiple', 'multipleSelect'].includes(item.type)">
-          <a-form-model-item :label="item.label" :prop="'testData.'+index+'.'+ `${item.name}`" :rules="{ required: item.required, message: `${item.label}不能为空!` }">
-            <a-input v-if="item.type==='input'" v-model="item[`${item.name}`]" placeholder="请输入" />
-            <a-slider v-if="item.type==='slider'" :marks="marks(item)" :min="item.minValue" :max="item.maxValue" style="width: 96%;display: inline-block" v-model="item.value" />
-            <a-switch v-if="item.type==='switch'" v-model="item.value"></a-switch>
-            <a-select v-if="item.type==='select'" v-model="item.value" placeholder="请选择">
-              <a-select-option v-for="(child, childIndex) in item.selectValue" :key="childIndex" :value="child">{{child}}</a-select-option>
+        <div
+          class="form-item-container"
+          v-if="
+            !['multipleWithKey', 'multiple', 'multipleSelect'].includes(
+              item.type
+            )
+          "
+        >
+          <a-form-model-item
+            :label="item.label"
+            :prop="'testData.' + index + '.' + `${item.name}`"
+            :rules="{
+              required: item.required,
+              message: `${item.label}不能为空!`,
+            }"
+          >
+            <a-input
+              v-if="item.type === 'input'"
+              v-model="item[`${item.name}`]"
+              placeholder="请输入"
+            />
+            <a-slider
+              v-if="item.type === 'slider'"
+              :marks="marks(item)"
+              :min="item.minValue"
+              :max="item.maxValue"
+              style="width: 95.6%; display: inline-block"
+              v-model="item.value"
+            />
+            <a-switch
+              v-if="item.type === 'switch'"
+              v-model="item.value"
+            ></a-switch>
+            <a-select
+              v-if="item.type === 'select'"
+              v-model="item.value"
+              placeholder="请选择"
+            >
+              <a-select-option
+                v-for="(child, childIndex) in item.selectValue"
+                :key="childIndex"
+                :value="child"
+                >{{ child }}</a-select-option
+              >
             </a-select>
             <a-tooltip v-if="item.description">
               <template slot="title">
-                <span>{{item.description}}</span>
+                <span>{{ item.description }}</span>
               </template>
-              <a-icon :class="['mgl10','filed-name-tips-icon', item.type === 'slider' ? 'slider-icon' : '']" type="question-circle-o" />
+              <a-icon
+                :class="[
+                  'mgl10',
+                  'filed-name-tips-icon',
+                  item.type === 'slider' ? 'slider-icon' : '',
+                ]"
+                type="question-circle-o"
+              />
             </a-tooltip>
           </a-form-model-item>
           <div class="filed-name-tips">
-            <span class="filed-name-tips-word" :title="item.name">{{item.name.replaceAll("!", ".")}}</span>
+            <span class="filed-name-tips-word" :title="item.name">{{
+              item.name.replaceAll("!", ".")
+            }}</span>
           </div>
         </div>
         <div v-else>
-          <div v-if="['multiple'].includes(item.type)" class="form-item-container">
-            <a-form-model-item :prop="'testData.'+index+'.'+ `${item.name+'multiple'+childIndex}`" v-for="(child, childIndex) in item.value" :key="childIndex" v-bind="childIndex === 0 ? labelCol : formItemLayoutWithOutLabel" :label="(childIndex === 0 || item.value.length === 0) ? item.label : ''">
-              <a-input v-model='item.value[childIndex]' placeholder="请输入" />
-              <span @click="() => reduceMultiple(item.name, childIndex, 'multiple')">
-                <svg-icon v-if="item.value.length > 1" icon-class="reduce-icon" class="reduce-icon" />
+          <div
+            v-if="['multiple'].includes(item.type)"
+            class="form-item-container"
+          >
+            <a-form-model-item
+              :prop="
+                'testData.' +
+                index +
+                '.' +
+                `${item.name + 'multiple' + childIndex}`
+              "
+              v-for="(child, childIndex) in item.value"
+              :key="childIndex"
+              v-bind="childIndex === 0 ? labelCol : formItemLayoutWithOutLabel"
+              :label="
+                childIndex === 0 || item.value.length === 0 ? item.label : ''
+              "
+            >
+              <a-input v-model="item.value[childIndex]" placeholder="请输入" />
+              <span
+                @click="() => reduceMultiple(item.name, childIndex, 'multiple')"
+              >
+                <svg-icon
+                  v-if="item.value.length > 1"
+                  icon-class="reduce-icon"
+                  class="reduce-icon"
+                />
               </span>
             </a-form-model-item>
-            <a-form-model-item class="form-multiple-item" v-bind="item.value.length === 0 ? labelCol : formItemLayoutWithOutLabel" :label="item.value.length === 0 ? item.label : ''">
-              <a-button type="dashed" @click="() => addMultiple(item.name, 'multiple')">
-                <a-icon type="plus" />Add field
+            <a-form-model-item
+              class="form-multiple-item"
+              v-bind="
+                item.value.length === 0 ? labelCol : formItemLayoutWithOutLabel
+              "
+              :label="item.value.length === 0 ? item.label : ''"
+            >
+              <a-button
+                type="dashed"
+                @click="() => addMultiple(item.name, 'multiple')"
+              >
+                添加文件
               </a-button>
             </a-form-model-item>
             <div class="filed-name-tips">
-              <span class="filed-name-tips-word" :title="item.name">{{item.name.replaceAll("!", ".")}}</span>
+              <span class="filed-name-tips-word" :title="item.name">{{
+                item.name.replaceAll("!", ".")
+              }}</span>
             </div>
           </div>
-          <div v-if="['multipleWithKey'].includes(item.type)" class="form-item-container">
-            <a-form-model-item  v-for="(child, childIndex) in item.value" :rules="[{required: item.required, whitespace: true, message: `${item.label}不能为空!`}]" :prop="'testData.'+index+'.'+ `${item.name+'arrayWithKey'+childIndex}`" style="margin-bottom: 0px" :key="childIndex" :required="item.required" v-bind="childIndex === 0 ? labelCol : formItemLayoutWithOutLabel" :label="childIndex === 0 || item.value.length === 0  ? item.label : ''">
+          <div
+            v-if="['multipleWithKey'].includes(item.type)"
+            class="form-item-container"
+          >
+            <a-form-model-item
+              v-for="(child, childIndex) in item.value"
+              :rules="[
+                {
+                  required: item.required,
+                  whitespace: true,
+                  message: `${item.label}不能为空!`,
+                },
+              ]"
+              :prop="
+                'testData.' +
+                index +
+                '.' +
+                `${item.name + 'arrayWithKey' + childIndex}`
+              "
+              style="margin-bottom: 0px"
+              :key="childIndex"
+              :required="item.required"
+              v-bind="childIndex === 0 ? labelCol : formItemLayoutWithOutLabel"
+              :label="
+                childIndex === 0 || item.value.length === 0 ? item.label : ''
+              "
+            >
               <a-row type="flex" style="position: relative">
                 <a-col :span="12">
-                  <a-form-model-item style="width:97%">
+                  <a-form-model-item style="width: 97%">
                     <a-input v-model="child.key" placeholder="请输入" />
                   </a-form-model-item>
                 </a-col>
                 <a-col :span="12">
-                  <a-form-model-item :prop="'testData.'+index+'.'+ `${item.name+'arrayWithValue'+childIndex}`" :rules="[{required: item.required, whitespace: true, message: `${item.label}不能为空!`}]"  style="width:97%">
+                  <a-form-model-item
+                    :prop="
+                      'testData.' +
+                      index +
+                      '.' +
+                      `${item.name + 'arrayWithValue' + childIndex}`
+                    "
+                    :rules="[
+                      {
+                        required: item.required,
+                        whitespace: true,
+                        message: `${item.label}不能为空!`,
+                      },
+                    ]"
+                    style="width: 97%"
+                  >
                     <a-input v-model="child.value" placeholder="请输入" />
                   </a-form-model-item>
                 </a-col>
-                <span style="position: absolute; right: 0px" @click="() => reduceMultiple(item.name, childIndex, 'multipleWithKey')">
-                  <svg-icon v-if="item.value.length > 1" icon-class="reduce-icon" class="reduce-icon" />
+                <span
+                  style="position: absolute; right: 0px"
+                  @click="
+                    () =>
+                      reduceMultiple(item.name, childIndex, 'multipleWithKey')
+                  "
+                >
+                  <svg-icon
+                    v-if="item.value.length > 1"
+                    icon-class="reduce-icon"
+                    class="reduce-icon"
+                  />
                 </span>
               </a-row>
             </a-form-model-item>
-            <a-form-model-item class="form-multiple-item" v-bind="item.value.length === 0 ? labelCol : formItemLayoutWithOutLabel" :label="item.value.length === 0 ? item.label : ''">
-              <a-button type="dashed" @click="() => addMultiple(item.name, 'multipleWithKey')">
-                <a-icon type="plus" />Add field
+            <a-form-model-item
+              class="form-multiple-item"
+              v-bind="
+                item.value.length === 0 ? labelCol : formItemLayoutWithOutLabel
+              "
+              :label="item.value.length === 0 ? item.label : ''"
+            >
+              <a-button
+                type="dashed"
+                @click="() => addMultiple(item.name, 'multipleWithKey')"
+              >
+                添加文件
               </a-button>
             </a-form-model-item>
             <div class="filed-name-tips">
-              <span class="filed-name-tips-word" :title="item.name">{{item.name.replaceAll("!", ".")}}</span>
+              <span class="filed-name-tips-word" :title="item.name">{{
+                item.name.replaceAll("!", ".")
+              }}</span>
             </div>
           </div>
-          <div v-if="['multipleSelect'].includes(item.type)" class="form-item-container">
-            <a-form-model-item :label="item.label" :prop="item.name" :rules="[{required: item.required, whitespace: true, message: `${item.label}不能为空!`}]">
-              <a-select mode="multiple" v-model="item.value" placeholder="请选择">
-                <a-select-option v-for="(child, childIndex) in item.selectValue" :key="childIndex" :value="child">{{child}}</a-select-option>
+          <div
+            v-if="['multipleSelect'].includes(item.type)"
+            class="form-item-container"
+          >
+            <a-form-model-item
+              :label="item.label"
+              :prop="item.name"
+              :rules="[
+                {
+                  required: item.required,
+                  whitespace: true,
+                  message: `${item.label}不能为空!`,
+                },
+              ]"
+            >
+              <a-select
+                mode="multiple"
+                v-model="item.value"
+                placeholder="请选择"
+              >
+                <a-select-option
+                  v-for="(child, childIndex) in item.selectValue"
+                  :key="childIndex"
+                  :value="child"
+                  >{{ child }}</a-select-option
+                >
               </a-select>
               <a-tooltip v-if="item.description">
                 <template slot="title">
-                  <span>{{item.description}}</span>
+                  <span>{{ item.description }}</span>
                 </template>
-                <a-icon class="mgl10 filed-name-tips-icon" type="question-circle-o" />
+                <a-icon
+                  class="mgl10 filed-name-tips-icon"
+                  type="question-circle-o"
+                />
               </a-tooltip>
             </a-form-model-item>
             <div class="filed-name-tips">
-              <span class="filed-name-tips-word" :title="item.name">{{item.name.replaceAll("!", ".")}}</span>
+              <span class="filed-name-tips-word" :title="item.name">{{
+                item.name.replaceAll("!", ".")
+              }}</span>
             </div>
           </div>
         </div>
@@ -117,7 +290,7 @@ export default {
   components: {},
   props: { templateData: Array },
   data() {
-    const self = this
+    const self = this;
     return {
       labelCol: {
         xs: { span: 24 },
@@ -170,7 +343,7 @@ export default {
   methods: {
     initFormData() {
       let arr = _.cloneDeep(this.form.testData);
-      console.log(arr, '要渲染的数据')
+      console.log(arr, "要渲染的数据");
       let formData = arr.filter((item) => !item.hidden);
       formData.forEach((item, index) => {
         if (["multipleWithKey", "multiple"].includes(item.type)) {
@@ -201,11 +374,14 @@ export default {
           item.value = [null, undefined, ""].includes(item.value)
             ? item.defaultValue
             : item.value;
-          if (Object.prototype.toString.call(item.value) === '[object Array]' && item.value.length === 0) {
-            item.value = item.defaultValue
+          if (
+            Object.prototype.toString.call(item.value) === "[object Array]" &&
+            item.value.length === 0
+          ) {
+            item.value = item.defaultValue;
           }
         }
-        item[`${item.name}`] = item.value
+        item[`${item.name}`] = item.value;
       });
       this.form.testData = formData;
     },
@@ -277,8 +453,8 @@ export default {
         }
       }
       .filed-name-tips-icon {
-          cursor: pointer;
-        }
+        cursor: pointer;
+      }
       .slider-icon {
         position: relative;
         top: -28px;

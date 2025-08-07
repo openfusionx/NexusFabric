@@ -26,16 +26,32 @@
 
 <template>
   <div class="tag-list">
-    <a-row type="flex" align="middle">
-      <a-col :span="24" style="text-align: right">
-        <a-button style="margin: 10px 0px 10px 10px;" type="primary" @click="createTag({})">{{'添加标签'}}</a-button>
-      </a-col>
-    </a-row>
-    <a-card class="card-shadow">  
+    <a-card class="card-shadow">
+      <a-row type="flex" align="middle">
+        <a-col :span="24" style="text-align: right">
+          <a-button
+            style="margin: 10px 0px 10px 10px"
+            type="primary"
+            @click="createTag({})"
+            >{{ "添加标签" }}</a-button
+          >
+        </a-col>
+      </a-row>
       <div class="table-info steps-body">
-        <a-table @change="(pagination)=>{this.tableChange(pagination)}" :columns="columns" :loading="loading" :dataSource="dataSource" rowKey="id" :pagination="pagination"></a-table>
+        <a-table
+          @change="
+            (pagination) => {
+              this.tableChange(pagination);
+            }
+          "
+          :columns="columns"
+          :loading="loading"
+          :dataSource="dataSource"
+          rowKey="id"
+          :pagination="pagination"
+        ></a-table>
       </div>
-    </a-card>  
+    </a-card>
   </div>
 </template>
 
@@ -83,11 +99,14 @@ export default {
         {
           title: "操作",
           key: "action",
-          width:180,
+          width: 180,
           customRender: (text, row, index) => {
             return (
               <span class="flex-container">
-                <a class="btn-opt" onClick={() => this.deleteTag(row)}>
+                <a
+                  class="btn-opt delete-btn"
+                  onClick={() => this.deleteTag(row)}
+                >
                   删除
                 </a>
               </span>
@@ -97,12 +116,11 @@ export default {
       ],
     };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
-    tableChange(pagination,key) {
+    tableChange(pagination, key) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.getLabelList();
     },
     getVal(val, filed) {
@@ -113,7 +131,7 @@ export default {
       this.pagination.current = 1;
       this.getLabelList();
     },
-    createTag(obj,key) {
+    createTag(obj, key) {
       const self = this;
       let width = 520;
       let title = JSON.stringify(obj) === "{}" ? "添加标签" : "编辑标签";
@@ -130,7 +148,7 @@ export default {
         },
       });
     },
-    deleteTag(obj,key) {
+    deleteTag(obj, key) {
       const self = this;
       let width = 400;
       let content = (
@@ -144,10 +162,10 @@ export default {
         width: width,
         title: () => {
           return (
-            <div>
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
@@ -165,7 +183,7 @@ export default {
       let params = {
         // pageSize: this.pagination.pageSize,
         // page: this.pagination.current,
-        clusterId: this.clusterId
+        clusterId: this.clusterId,
       };
       this.$axiosPost(global.API.getLabelList, params).then((res) => {
         this.loading = false;
@@ -186,7 +204,7 @@ export default {
   .btn-opt {
     border-radius: 1px;
     font-size: 12px;
-    color: #0264c8;
+    color: #f4622e;
     letter-spacing: 0;
     font-weight: 400;
     margin: 0 5px;

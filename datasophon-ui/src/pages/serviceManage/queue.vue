@@ -26,13 +26,34 @@
 
 <template>
   <div class="queue-page">
-    <div class="flex-container" style="position: absolute;top: -52px;right: 0px;z-index: 400000;">
-      <a-button style="margin-right: 10px; margin-bottom: 20px" type="primary" @click="addQueue({})">新建队列</a-button>
-      <a-button style="margin-right: 10px; margin-bottom: 20px" type="primary" @click="refreshQueues">刷新队列到Yarn</a-button>
+    <div
+      class="flex-container"
+      style="position: absolute; top: -52px; right: 0px; z-index: 400000"
+    >
+      <a-button
+        style="margin-right: 10px; margin-bottom: 20px"
+        type="primary"
+        @click="addQueue({})"
+        >新建队列</a-button
+      >
+      <a-button
+        style="margin-right: 10px; margin-bottom: 20px"
+        type="primary"
+        @click="refreshQueues"
+        >刷新队列到Yarn</a-button
+      >
     </div>
     <div class="table-info steps-body">
       <!-- :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" -->
-      <a-table v-if="!showGraph" @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" rowKey="id" :pagination="pagination"></a-table>
+      <a-table
+        v-if="!showGraph"
+        @change="tableChange"
+        :columns="columns"
+        :loading="loading"
+        :dataSource="dataSource"
+        rowKey="id"
+        :pagination="pagination"
+      ></a-table>
       <QueueGraph v-else />
     </div>
   </div>
@@ -40,11 +61,11 @@
 
 <script>
 import AddQueue from "./addQueue.vue";
-import QueueGraph from './queueGraph.vue'
+import QueueGraph from "./queueGraph.vue";
 export default {
   name: "Queue",
   components: {
-    QueueGraph
+    QueueGraph,
   },
   provide() {
     return {
@@ -56,7 +77,7 @@ export default {
     return {
       params: {},
       visible: false,
-      showGraph:false,
+      showGraph: false,
       confirmLoading: false,
       clusterId: Number(localStorage.getItem("clusterId") || -1),
       pagination: {
@@ -130,7 +151,9 @@ export default {
           key: "allowPreemption",
           dataIndex: "allowPreemption",
           customRender: (text, row, index) => {
-            return <span class="flex-container">{text === 1 ? '是' : '否'}</span>;
+            return (
+              <span class="flex-container">{text === 1 ? "是" : "否"}</span>
+            );
           },
         },
         {
@@ -152,7 +175,10 @@ export default {
                   编辑
                 </a>
                 <a-divider type="vertical" />
-                <a class="btn-opt" onClick={() => this.deleteQueue(row)}>
+                <a
+                  class="btn-opt delete-btn"
+                  onClick={() => this.deleteQueue(row)}
+                >
                   删除
                 </a>
               </span>
@@ -173,7 +199,7 @@ export default {
     },
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.getQueueList();
     },
     getVal(val, filed) {
@@ -187,7 +213,9 @@ export default {
       this.getQueueList();
     },
     refreshQueues() {
-      const ajaxApi = this.showGraph ? global.API.refreshQueuesYARN : global.API.refreshQueues
+      const ajaxApi = this.showGraph
+        ? global.API.refreshQueuesYARN
+        : global.API.refreshQueues;
       this.$axiosPost(ajaxApi, {
         clusterId: this.clusterId,
       }).then((res) => {
@@ -219,21 +247,27 @@ export default {
         width: 450,
         title: () => {
           return (
-            <div style="font-size: 22px;">
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
           );
         },
         content: (
-          <div style="margin-top:20px">
-            <div style="padding:0 65px;font-size: 16px;color: #555555;">
-              确认删除吗？
+          <div style="margin-top:40px">
+            <div
+              style="padding:0 65px;font-size: 16px;color: #555555;"
+              class="tips-content"
+            >
+              确认<a class="delete-text">删除</a>吗？
             </div>
-            <div style="margin-top:20px;text-align:right;padding:0 30px 30px 30px">
+            <div
+              style="margin-top:40px;text-align:right;padding:0 30px 30px 30px"
+              class="ant-modal-confirm-btns-new"
+            >
               <a-button
                 style="margin-right:10px;"
                 type="primary"
@@ -274,9 +308,11 @@ export default {
         page: this.pagination.current,
         clusterId: this.clusterId || "",
       };
-      this.$axiosPost('/ddh/cluster/yarn/scheduler/info', {clusterId: this.clusterId}).then((res) => {
-        this.showGraph = res.data == 'capacity';
-        if(res.data && res.data == 'fair'){
+      this.$axiosPost("/ddh/cluster/yarn/scheduler/info", {
+        clusterId: this.clusterId,
+      }).then((res) => {
+        this.showGraph = res.data == "capacity";
+        if (res.data && res.data == "fair") {
           this.$axiosPost(global.API.getQueueList, params).then((res) => {
             this.loading = false;
             this.dataSource = res.data;
@@ -328,5 +364,24 @@ export default {
   .ant-modal-content {
     border-radius: 4px;
   }
+}
+.ant-modal-confirm-btns-new {
+  .ant-btn-primary {
+    background-color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn:hover {
+    color: #f4622e;
+    border-color: #f4622e;
+  }
+  .ant-btn-primary:hover {
+    color: #fff;
+  }
+}
+.tips-content {
+  text-align: center;
+}
+.delete-text {
+  color: #f4622e;
 }
 </style>

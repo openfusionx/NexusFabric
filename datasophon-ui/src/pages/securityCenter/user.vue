@@ -26,22 +26,42 @@
 
 <template>
   <div class="user-list">
-    <a-card class="mgb16 card-shadow">
-      <a-row type="flex" align="middle">
-        <a-col :span="22">
-          <a-input placeholder="请输入用户名" class="w252 mgr12" @change="(value) => getVal(value, 'username')" allowClear />
-          <a-button class type="primary" icon="search" @click="onSearch"></a-button>
+    <a-card class="card-shadow">
+      <a-row type="flex" align="middle" class="row-bottom">
+        <a-col :span="20">
+          <a-input
+            placeholder="请输入用户名"
+            class="w252 mgr12"
+            @change="(value) => getVal(value, 'username')"
+            allowClear
+          />
+          <a-button
+            class
+            type="primary"
+            icon="search"
+            @click="onSearch"
+          ></a-button>
         </a-col>
-        <a-col :span="2" style="text-align: right">
-          <a-button style="margin-left: 10px;" type="primary" @click="createUser({})">添加用户</a-button>
+        <a-col :span="4" style="text-align: right">
+          <a-button
+            style="margin-left: 10px"
+            type="primary"
+            @click="createUser({})"
+            >添加用户</a-button
+          >
         </a-col>
       </a-row>
-    </a-card>
-    <a-card class="card-shadow">  
       <div class="table-info steps-body">
-        <a-table @change="tableChange" :columns="columns" :loading="loading" :dataSource="dataSource" rowKey="id" :pagination="pagination"></a-table>
+        <a-table
+          @change="tableChange"
+          :columns="columns"
+          :loading="loading"
+          :dataSource="dataSource"
+          rowKey="id"
+          :pagination="pagination"
+        ></a-table>
       </div>
-    </a-card>  
+    </a-card>
   </div>
 </template>
 
@@ -63,7 +83,7 @@ export default {
         pageSizeOptions: ["10", "20", "50", "100"],
         showTotal: (total) => `共 ${total} 条`,
       },
-      username:'',
+      username: "",
       dataSource: [],
       loading: false,
       columns: [
@@ -103,51 +123,52 @@ export default {
           key: "action",
           width: 140,
           customRender: (text, row, index) => {
-            return (
-              this.username == "admin" ? (
-                <span class="flex-container">
+            return this.username == "admin" ? (
+              <span class="flex-container">
+                <a class="btn-opt" onClick={() => this.createUser(row)}>
+                  编辑
+                </a>
+                <a-divider type="vertical" />
+                {row.userType !== 1 ? (
                   <a
-                    class="btn-opt"
-                    onClick={() => this.createUser(row)}
+                    class="btn-opt delete-btn"
+                    onClick={() => this.delectUser(row)}
                   >
-                    编辑
+                    删除
                   </a>
-                  <a-divider type="vertical" />
-                  { row.userType !==1?  <a class="btn-opt" onClick={() => this.delectUser(row)}>
+                ) : (
+                  <a class="btn-opt " style="color: #bbb">
                     删除
-                  </a> :<a class="btn-opt" style="color: #bbb">
-                    删除
-                  </a>}
-                 
-                </span>
-              ) :
-                row.username == this.username ? (
-                  <span class="flex-container">
-                    <a
-                      class="btn-opt"
-                      onClick={() => this.createUser(row)}
-                    >
-                    编辑
-                    </a>
-                    <a-divider type="vertical" />
-                    <a class="btn-opt" onClick={() => this.delectUser(row)}>
-                    删除
-                    </a>
-                  </span>
-                ) :  (
-                  <span class="flex-container">
-                    <a
-                      class="btn-opt" style="color: #bbb"
-                    //onClick={() => this.createUser(row)}
-                    >
-                    编辑
-                    </a>
-                    <a-divider type="vertical" />
-                    <a class="btn-opt" style="color: #bbb">
-                    删除
-                    </a>
-                  </span>
-                )
+                  </a>
+                )}
+              </span>
+            ) : row.username == this.username ? (
+              <span class="flex-container">
+                <a class="btn-opt" onClick={() => this.createUser(row)}>
+                  编辑
+                </a>
+                <a-divider type="vertical" />
+                <a
+                  class="btn-opt delete-btn"
+                  onClick={() => this.delectUser(row)}
+                >
+                  删除
+                </a>
+              </span>
+            ) : (
+              <span class="flex-container">
+                <a
+                  class="btn-opt"
+                  style="color: #bbb"
+                  //onClick={() => this.createUser(row)}
+                >
+                  编辑
+                </a>
+                <a-divider type="vertical" />
+                <a class="btn-opt" style="color: #bbb">
+                  删除
+                </a>
+              </span>
             );
           },
         },
@@ -160,7 +181,7 @@ export default {
   methods: {
     tableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.pagination.pageSize = pagination.pageSize
+      this.pagination.pageSize = pagination.pageSize;
       this.getUserList();
     },
     getVal(val, filed) {
@@ -202,10 +223,10 @@ export default {
         width: width,
         title: () => {
           return (
-            <div>
+            <div class="tips-title">
               <a-icon
-                type="question-circle"
-                style="color:#2F7FD1 !important;margin-right:10px"
+                type="exclamation-circle"
+                style="color:#F4622E !important;margin-right:10px"
               />
               提示
             </div>
@@ -225,7 +246,7 @@ export default {
         page: this.pagination.current,
         username: this.params.username || "",
       };
-      this.username =  this.user.username
+      this.username = this.user.username;
       this.$axiosPost(global.API.getUserList, params).then((res) => {
         this.loading = false;
         console.log(res);
@@ -246,10 +267,14 @@ export default {
   .btn-opt {
     border-radius: 1px;
     font-size: 12px;
-    color: #0264c8;
+    color: #5a9dbe;
     letter-spacing: 0;
     font-weight: 400;
     margin: 0 5px;
   }
+}
+.tips-title {
+  text-align: center;
+  margin-top: 13px;
 }
 </style>

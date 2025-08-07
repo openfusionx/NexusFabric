@@ -27,8 +27,8 @@
     <artifactId>datasophon-ui</artifactId>
 
     <properties>
-        <build.node.version>v20.16.0</build.node.version>
-        <build.npm.version>10.8.1</build.npm.version>
+        <build.node.version>v16.20.0</build.node.version>
+        <build.npm.version>8.19.4</build.npm.version>
         <deployed.dir>.deployed</deployed.dir>
         <dist.dir>dist</dist.dir>
         <nodemodules.dir>node_modules</nodemodules.dir>
@@ -67,7 +67,7 @@
                     <nodeVersion>${build.node.version}</nodeVersion>
                     <npmVersion>${build.npm.version}</npmVersion>
 
-                    <nodeDownloadRoot>https://npmmirror.com/mirrors/node/</nodeDownloadRoot>
+                    <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
                     <npmDownloadRoot>https://registry.npmmirror.com/npm/-/</npmDownloadRoot>
                 </configuration>
                 <executions>
@@ -85,7 +85,7 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>install --registry=https://registry.npmmirror.com --sass-binary-site=https://npmmirror.com/mirrors/node-sass</arguments>
+                            <arguments>install --registry=https://registry.npmmirror.com</arguments>
                         </configuration>
                     </execution>
                     <execution>

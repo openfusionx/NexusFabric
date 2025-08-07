@@ -25,28 +25,71 @@
 -->
 <template>
   <div style="padding-top: 10px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
       <a-form-item label="用户名称">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'username',
-            { rules: [{ required: true, message: '用户名称不能为空!' }, { validator: checkName }] },
-          ]" placeholder="请输入用户名称" />
+            {
+              rules: [
+                { required: true, message: '用户名称不能为空!' },
+                { validator: checkName },
+              ],
+            },
+          ]"
+          placeholder="请输入用户名称"
+        />
       </a-form-item>
       <a-form-item label="主用户组">
-        <a-select showSearch allowClear 
-          v-decorator="['mainGroupId', {rules: [{ required: true, message: '用户组不能为空' }]}]" placeholder="请选择用户组"  >
-          <a-select-option v-for="list in groupList" :key="list.id" :value="list.id">  {{list.groupName}} </a-select-option>
+        <a-select
+          showSearch
+          allowClear
+          v-decorator="[
+            'mainGroupId',
+            { rules: [{ required: true, message: '用户组不能为空' }] },
+          ]"
+          placeholder="请选择用户组"
+        >
+          <a-select-option
+            v-for="list in groupList"
+            :key="list.id"
+            :value="list.id"
+          >
+            {{ list.groupName }}
+          </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="附属用户组">
-        <a-select showSearch allowClear mode="multiple"
-          v-decorator="['usergroup', {rules: [{ required: false }]}]" placeholder="请选择用户组"  >
-          <a-select-option v-for="list in groupList" :key="list.id" :value="list.id">  {{list.groupName}} </a-select-option>
+        <a-select
+          showSearch
+          allowClear
+          mode="multiple"
+          v-decorator="['usergroup', { rules: [{ required: false }] }]"
+          placeholder="请选择用户组"
+        >
+          <a-select-option
+            v-for="list in groupList"
+            :key="list.id"
+            :value="list.id"
+          >
+            {{ list.groupName }}
+          </a-select-option>
         </a-select>
       </a-form-item>
     </a-form>
     <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -75,7 +118,7 @@ export default {
       },
       form: this.$form.createForm(this),
       loading: false,
-      groupList:[],
+      groupList: [],
     };
   },
   watch: {},
@@ -99,9 +142,9 @@ export default {
         pageSize: 1000,
         page: 1,
         groupName: "",
-        clusterId: localStorage.getItem("clusterId")
+        clusterId: localStorage.getItem("clusterId"),
       };
-      this.$axiosPost('/ddh/cluster/group/list', params).then((res) => {
+      this.$axiosPost("/ddh/cluster/group/list", params).then((res) => {
         this.loading = false;
         this.groupList = res.data;
       });
@@ -113,13 +156,14 @@ export default {
         console.log(values);
         if (!err) {
           const params = {
-            clusterId:localStorage.getItem("clusterId"),
+            clusterId: localStorage.getItem("clusterId"),
             username: values.username,
             mainGroupId: values.mainGroupId,
-            otherGroupIds: values.usergroup == null ?"" :values.usergroup.join(',')
+            otherGroupIds:
+              values.usergroup == null ? "" : values.usergroup.join(","),
           };
           this.loading = true;
-          this.$axiosPost('/ddh/cluster/user/create', params)
+          this.$axiosPost("/ddh/cluster/user/create", params)
             .then((res) => {
               this.loading = false;
               if (res.code === 200) {
@@ -134,22 +178,22 @@ export default {
     },
     echoUSer() {
       if (JSON.stringify(this.detail) !== "{}") {
-      // this.editFlag = true;
+        // this.editFlag = true;
         this.form.getFieldsValue(["username", "phone", "password", "email"]);
         this.form.setFieldsValue({
           username: this.detail.username,
           phone: this.detail.phone,
           //password: this.detail.password,
-          password: '',
+          password: "",
           email: this.detail.email,
         });
       } else {
         this.form.getFieldsValue(["username", "phone", "password", "email"]);
         this.form.setFieldsValue({
-          username: '',
-          phone: '',
-          password: '',
-          email: '',
+          username: "",
+          phone: "",
+          password: "",
+          email: "",
         });
       }
     },
@@ -157,10 +201,16 @@ export default {
   mounted() {
     this.echoUSer();
   },
-  created(){
+  created() {
     this.getGroupList();
-  }
+  },
 };
 </script>
 <style lang="less" scoped>
+.ant-input {
+  height: 40px !important;
+}
+.ant-btn {
+  width: 88px !important;
+}
 </style>
