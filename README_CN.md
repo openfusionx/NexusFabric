@@ -1,19 +1,19 @@
 <div align="center">
-         <a href="https://github.com/datasophon/datasophon" target="_blank" rel="noopener noreferrer">
-           <img src="website/static/img/logo.png" width="20%" height="20%" alt="DataSophon Logo" />
-        </a>
+         <a href="https://github.com/openfusionx/NexusFabric" target="_blank" rel="noopener noreferrer">
+           <img src="website/static/img/logo.png" width="20%" height="20%" alt="NexusFabric Logo" />
+         </a>
  <h1>NexusFabric</h1>
 
  <h3>帮助您更容易地管理和监控集群</h3>
 </div>
 
 <p align="center">
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green"></a> 
   <a href="#contributors"><img src="https://img.shields.io/badge/contributors-5-blue"></a>
 </p>
 <p align="center">
-    <a href="https://datasophon.github.io/datasophon-website/">Office Website</a> 
-    <a href="https://github.com/datasophon/datasophon/blob/dev/README_CN.md">Chinese</a>
+    <a href="http://8.147.110.65:3000/datasophon-website/">Office Website</a>  ｜
+    <a href="https://github.com/openfusionx/NexusFabric/blob/main/README.md">English</a>
 </p>
 <h3>觉得不错的话，star fork下，欢迎社区开发者共建NexusFabric</h3>
 
