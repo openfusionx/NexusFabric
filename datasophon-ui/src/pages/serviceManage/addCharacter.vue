@@ -1,4 +1,3 @@
-
 <template>
   <div style="padding-top: 20px">
     <a-form
@@ -22,13 +21,24 @@
                <a-select-option :value="item.serviceRoleName" v-for="(item,index) in cateList" :key="index">{{item.serviceRoleName}}</a-select-option>
           </a-select>
       </a-form-item> -->
-       <a-form-item label="角色组模板">
-           <a-select v-decorator="['characterGroupId', { rules: [{ required: true, message: '角色组模板不能为空!' }]}]"  placeholder="请选择告角色组模板">
-               <a-select-option :value="item.id" v-for="(item,index) in GroupList" :key="index">{{item.roleGroupName}}</a-select-option>
-          </a-select>
+      <a-form-item label="角色组模板">
+        <a-select
+          v-decorator="[
+            'characterGroupId',
+            { rules: [{ required: true, message: '角色组模板不能为空!' }] },
+          ]"
+          placeholder="请选择告角色组模板"
+        >
+          <a-select-option
+            :value="item.id"
+            v-for="(item, index) in GroupList"
+            :key="index"
+            >{{ item.roleGroupName }}</a-select-option
+          >
+        </a-select>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button
         style="margin-right: 10px"
         type="primary"
@@ -49,13 +59,13 @@ export default {
         return {};
       },
     },
-    edit:{
-      type:Object,
+    edit: {
+      type: Object,
       default: function () {
         return {};
       },
     },
-    callBack:Function
+    callBack: Function,
   },
   data() {
     return {
@@ -71,7 +81,7 @@ export default {
       value1: "",
       loading: false,
       cateList: [], //类型
-      GroupList:[]  //列表
+      GroupList: [], //列表
     };
   },
   watch: {},
@@ -80,48 +90,48 @@ export default {
       this.$destroyAll();
     },
     handleSubmit(e) {
-      const _this = this
+      const _this = this;
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
           const params = {
-            "roleGroupName": values.characterGroupName, 
-            "roleGroupId": values.characterGroupId,
-            serviceInstanceId: this.serviceId.id
-          }
+            roleGroupName: values.characterGroupName,
+            roleGroupId: values.characterGroupId,
+            serviceInstanceId: this.serviceId.id,
+          };
           this.loading = true;
-          this.$axiosPost(global.API.addRoleGroupSave, params).then((res) => {  
-            this.loading = false;
-            if (res.code !== 200) return
-            this.$message.success('保存角色组成功')
-            this.$destroyAll();
-            _this.callBack();
-          }).catch((err) => {});
+          this.$axiosPost(global.API.addRoleGroupSave, params)
+            .then((res) => {
+              this.loading = false;
+              if (res.code !== 200) return;
+              this.$message.success("保存角色组成功");
+              this.$destroyAll();
+              _this.callBack();
+            })
+            .catch((err) => {});
         }
       });
     },
     getServiceRoleType() {
-      const params={
-        serviceInstanceId :this.serviceId.id
-      }
+      const params = {
+        serviceInstanceId: this.serviceId.id,
+      };
       //角色组类型
       // this.$axiosPost(global.API.getServiceRoleType, params).then((res) => {
       //   if (res.code !== 200) return
       //   this.cateList = res.data
       // }
-      // ) 
+      // )
       //角色组列表
       this.$axiosPost(global.API.getRoleGroupList, params).then((res) => {
-        if (res.code !== 200) return  //this.$message.error('获取角色组列表失败')
-        this.GroupList = res.data
-        
-      })
-    }
+        if (res.code !== 200) return; //this.$message.error('获取角色组列表失败')
+        this.GroupList = res.data;
+      });
+    },
   },
   mounted() {
-    this.getServiceRoleType()
+    this.getServiceRoleType();
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

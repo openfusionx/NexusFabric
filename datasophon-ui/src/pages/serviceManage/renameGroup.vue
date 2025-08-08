@@ -1,4 +1,3 @@
-
 <template>
   <div style="padding-top: 20px">
     <a-form
@@ -18,7 +17,7 @@
         />
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button
         style="margin-right: 10px"
         type="primary"
@@ -33,13 +32,13 @@
 <script>
 export default {
   props: {
-    grouopObj:{
-      type:Object,
+    grouopObj: {
+      type: Object,
       default: function () {
         return {};
       },
     },
-    callBack:Function
+    callBack: Function,
   },
   data() {
     return {
@@ -55,7 +54,7 @@ export default {
       value1: "",
       loading: false,
       cateList: [], //类型
-      GroupList:[]  //列表
+      GroupList: [], //列表
     };
   },
   watch: {},
@@ -64,40 +63,39 @@ export default {
       this.$destroyAll();
     },
     handleSubmit(e) {
-      const _this = this
+      const _this = this;
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
           const params = {
-            "roleGroupName": values.roleGroupName, 
-            "roleGroupId": this.grouopObj.id,
-          }
+            roleGroupName: values.roleGroupName,
+            roleGroupId: this.grouopObj.id,
+          };
           this.loading = true;
-          this.$axiosPost(global.API.reNameGroup, params).then((res) => {  
-            this.loading = false;
-            if (res.code !== 200) return
-            this.$message.success('修改成功')
-            this.$destroyAll();
-            _this.callBack(params);
-          }).catch((err) => {});
+          this.$axiosPost(global.API.reNameGroup, params)
+            .then((res) => {
+              this.loading = false;
+              if (res.code !== 200) return;
+              this.$message.success("修改成功");
+              this.$destroyAll();
+              _this.callBack(params);
+            })
+            .catch((err) => {});
         }
       });
     },
-    initData () {
+    initData() {
       if (JSON.stringify(this.grouopObj) !== "{}") {
-        this.form.getFieldsValue([
-          "roleGroupName"
-        ]);
+        this.form.getFieldsValue(["roleGroupName"]);
         this.form.setFieldsValue({
-          roleGroupName: this.grouopObj.roleGroupName
+          roleGroupName: this.grouopObj.roleGroupName,
         });
-      } 
-    }
+      }
+    },
   },
   mounted() {
-    this.initData()
+    this.initData();
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

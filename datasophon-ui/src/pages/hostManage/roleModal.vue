@@ -29,18 +29,26 @@
   <div class="role-model">
     <a-spin :spinning="loading">
       <div class="flex-container flex-warp">
-        <span v-for="(item, index) in dataSource" :key="index" class="flex-container role-item">
-          <span :class="['circle-point',
-          item.serviceRoleStateCode === 1
-          ? 'success-point'
-          : item.serviceRoleStateCode === 2
-          ? 'error-point'
-          : 'configured-point']" />
-          {{item.serviceRoleName}}
+        <span
+          v-for="(item, index) in dataSource"
+          :key="index"
+          class="flex-container role-item"
+        >
+          <span
+            :class="[
+              'circle-point',
+              item.serviceRoleStateCode === 1
+                ? 'success-point'
+                : item.serviceRoleStateCode === 2
+                ? 'error-point'
+                : 'configured-point',
+            ]"
+          />
+          {{ item.serviceRoleName }}
         </span>
       </div>
     </a-spin>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button @click.stop="formCancel">关闭</a-button>
     </div>
   </div>
@@ -84,8 +92,8 @@ export default {
   padding: 10px 0 0 32px;
   .flex-warp {
     flex-wrap: wrap;
-      max-height: 500px;
-      overflow-y: auto;
+    max-height: 500px;
+    overflow-y: auto;
     .role-item {
       // width: 33%;
       padding: 0 16px 10px 0;

@@ -52,12 +52,23 @@
         />
       </a-form-item>
       <a-form-item label="集群框架">
-          <a-select v-decorator="['clusterFrame', { rules: [{ required: true, message: '集群框架不能为空!' }]}]"  placeholder="请选择集群框架">
-               <a-select-option :value="item.frameCode" v-for="(item,index) in frameList" :key="index">{{item.frameCode}}</a-select-option>
-          </a-select>
+        <a-select
+          v-decorator="[
+            'clusterFrame',
+            { rules: [{ required: true, message: '集群框架不能为空!' }] },
+          ]"
+          placeholder="请选择集群框架"
+        >
+          <a-select-option
+            :value="item.frameCode"
+            v-for="(item, index) in frameList"
+            :key="index"
+            >{{ item.frameCode }}</a-select-option
+          >
+        </a-select>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button
         style="margin-right: 10px"
         type="primary"
@@ -78,7 +89,7 @@ export default {
         return {};
       },
     },
-    callBack:Function
+    callBack: Function,
   },
   data() {
     return {
@@ -93,7 +104,7 @@ export default {
       form: this.$form.createForm(this),
       value1: "",
       loading: false,
-      frameList: [] //集群框架列表
+      frameList: [], //集群框架列表
     };
   },
   watch: {},
@@ -102,50 +113,58 @@ export default {
       this.$destroyAll();
     },
     handleSubmit(e) {
-      const _this = this
+      const _this = this;
       e.preventDefault();
       this.form.validateFields((err, values) => {
         console.log(values);
         if (!err) {
           const params = {
-            "clusterName": values.clusterName, 
-            "clusterCode": values.clusterCode, 
-            "clusterFrame": values.clusterFrame
-          }
-          if (JSON.stringify(this.detail) !== '{}') params.id = this.detail.id
+            clusterName: values.clusterName,
+            clusterCode: values.clusterCode,
+            clusterFrame: values.clusterFrame,
+          };
+          if (JSON.stringify(this.detail) !== "{}") params.id = this.detail.id;
           this.loading = true;
-          const ajaxApi = JSON.stringify(this.detail) !== '{}' ? global.API.updateColony : global.API.saveColony
-          this.$axiosJsonPost(ajaxApi, params).then((res) => {  
-            this.loading = false;
-            if (res.code === 200) {
-              this.$message.success('保存成功', 2)
-              this.$destroyAll();
-              _this.callBack();
-            }
-          }).catch((err) => {});
+          const ajaxApi =
+            JSON.stringify(this.detail) !== "{}"
+              ? global.API.updateColony
+              : global.API.saveColony;
+          this.$axiosJsonPost(ajaxApi, params)
+            .then((res) => {
+              this.loading = false;
+              if (res.code === 200) {
+                this.$message.success("保存成功", 2);
+                this.$destroyAll();
+                _this.callBack();
+              }
+            })
+            .catch((err) => {});
         }
       });
     },
     getFrameList() {
       this.$axiosPost(global.API.getFrameList, {}).then((res) => {
         if (res.code === 200) {
-          this.frameList = res.data
-          if (JSON.stringify(this.detail) !== '{}') {
-            this.form.getFieldsValue(['clusterName', 'clusterFrame', 'clusterCode'])
+          this.frameList = res.data;
+          if (JSON.stringify(this.detail) !== "{}") {
+            this.form.getFieldsValue([
+              "clusterName",
+              "clusterFrame",
+              "clusterCode",
+            ]);
             this.form.setFieldsValue({
-              clusterName:this.detail.clusterName,
+              clusterName: this.detail.clusterName,
               clusterFrame: this.detail.clusterFrame,
-              clusterCode: this.detail.clusterCode
-            })
+              clusterCode: this.detail.clusterCode,
+            });
           }
         }
-      })
-    }
+      });
+    },
   },
   mounted() {
-    this.getFrameList()
+    this.getFrameList();
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

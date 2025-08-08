@@ -25,16 +25,35 @@
 -->
 <template>
   <div style="padding-top: 10px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
       <a-form-item label="用户组名称">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'groupName',
-            { rules: [{ required: true, message: '用户组名称不能为空!' }, { validator: checkName }] },
-          ]" placeholder="请输入用户组名称" />
+            {
+              rules: [
+                { required: true, message: '用户组名称不能为空!' },
+                { validator: checkName },
+              ],
+            },
+          ]"
+          placeholder="请输入用户组名称"
+        />
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+    <div class="ant-modal-confirm-sure-btns-new">
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -63,7 +82,7 @@ export default {
       },
       form: this.$form.createForm(this),
       loading: false,
-      groupList:[],
+      groupList: [],
     };
   },
   watch: {},
@@ -88,10 +107,10 @@ export default {
         if (!err) {
           const params = {
             groupName: values.groupName,
-            clusterId: Number(localStorage.getItem("clusterId") || '-1'),
+            clusterId: Number(localStorage.getItem("clusterId") || "-1"),
           };
           this.loading = true;
-          this.$axiosPost('/ddh/cluster/group/save', params)
+          this.$axiosPost("/ddh/cluster/group/save", params)
             .then((res) => {
               this.loading = false;
               if (res.code === 200) {
@@ -105,9 +124,7 @@ export default {
       });
     },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

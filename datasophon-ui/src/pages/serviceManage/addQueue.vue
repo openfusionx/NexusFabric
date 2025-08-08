@@ -25,120 +25,200 @@
 -->
 <template>
   <div style="padding-top: 20px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
       <a-form-item label="队列名称">
-        <a-input id="error" v-decorator="[
+        <a-input
+          id="error"
+          v-decorator="[
             'queueName',
-            { rules: [{ required: true, message: '队列名称不能为空!' }, { validator: checkName }] },
-          ]" placeholder="请输入队列名称" />
+            {
+              rules: [
+                { required: true, message: '队列名称不能为空!' },
+                { validator: checkName },
+              ],
+            },
+          ]"
+          placeholder="请输入队列名称"
+        />
       </a-form-item>
-      <a-form-item label="最小资源数" style="margin-bottom: 0px" :required="true">
+      <a-form-item
+        label="最小资源数"
+        style="margin-bottom: 0px"
+        :required="true"
+      >
         <a-row type="flex" style="position: relative">
           <a-col :span="9">
             <a-form-item>
-              <a-input v-decorator="[
-                    `minCore`,
-                    {
+              <a-input
+                v-decorator="[
+                  `minCore`,
+                  {
                     rules: [
                       {
                         required: true,
                         message: `最小内核数不能为空!`,
                       },
-                      { validator: checkNumber }
+                      { validator: checkNumber },
                     ],
-                  }
-                  ]" placeholder="请输入" />
+                  },
+                ]"
+                placeholder="请输入"
+              />
             </a-form-item>
           </a-col>
           <a-col :span="2" style="text-align: right">Core</a-col>
           <a-col :span="2" style></a-col>
           <a-col :span="9">
             <a-form-item>
-              <a-input v-decorator="[
-                    `minMem`,
-                    {
+              <a-input
+                v-decorator="[
+                  `minMem`,
+                  {
                     rules: [
                       {
                         required: true,
                         message: `最小内存数不能为空`,
                       },
-                      { validator: checkNumber }
+                      { validator: checkNumber },
                     ],
-                  }
-                  ]" placeholder="请输入" />
+                  },
+                ]"
+                placeholder="请输入"
+              />
             </a-form-item>
           </a-col>
           <a-col :span="2" style="text-align: right">GB</a-col>
         </a-row>
       </a-form-item>
-      <a-form-item label="最大资源数" style="margin-bottom: 0px" :required="true">
+      <a-form-item
+        label="最大资源数"
+        style="margin-bottom: 0px"
+        :required="true"
+      >
         <a-row type="flex" style="position: relative">
           <a-col :span="9">
             <a-form-item>
-              <a-input v-decorator="[
-                    `maxCore`,
-                    {
+              <a-input
+                v-decorator="[
+                  `maxCore`,
+                  {
                     rules: [
                       {
                         required: true,
                         message: `最大内核数不能为空!`,
                       },
-                      { validator: checkNumber }
+                      { validator: checkNumber },
                     ],
-                  }
-                  ]" placeholder="请输入" />
+                  },
+                ]"
+                placeholder="请输入"
+              />
             </a-form-item>
           </a-col>
           <a-col :span="2" style="text-align: right">Core</a-col>
           <a-col :span="2" style></a-col>
           <a-col :span="9">
             <a-form-item>
-              <a-input v-decorator="[
-                    `maxMem`,
-                    {
+              <a-input
+                v-decorator="[
+                  `maxMem`,
+                  {
                     rules: [
                       {
                         required: true,
                         message: `最大内存数不能为空`,
                       },
-                      { validator: checkNumber }
+                      { validator: checkNumber },
                     ],
-                  }
-                  ]" placeholder="请输入" />
+                  },
+                ]"
+                placeholder="请输入"
+              />
             </a-form-item>
           </a-col>
           <a-col :span="2" style="text-align: right">GB</a-col>
         </a-row>
       </a-form-item>
       <a-form-item label="最多同时运行应用数">
-        <a-input id="error" v-decorator="[
+        <a-input
+          id="error"
+          v-decorator="[
             'appNum',
-            { rules: [{ required: true, message: '最多同时运行应用数不能为空!' }, { validator: checkNumber }] },
-          ]" placeholder="请输入最多同时运行应用数" />
+            {
+              rules: [
+                { required: true, message: '最多同时运行应用数不能为空!' },
+                { validator: checkNumber },
+              ],
+            },
+          ]"
+          placeholder="请输入最多同时运行应用数"
+        />
       </a-form-item>
       <a-form-item label="资源分配策略">
-        <a-select v-decorator="['schedulePolicy', { rules: [{ required: true, message: '资源分配策略不能为空!' }]}]" placeholder="请选择资源分配策略">
-          <a-select-option :value="item.label" v-for="(item,index) in schedulePolicyList" :key="index">{{item.label}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'schedulePolicy',
+            { rules: [{ required: true, message: '资源分配策略不能为空!' }] },
+          ]"
+          placeholder="请选择资源分配策略"
+        >
+          <a-select-option
+            :value="item.label"
+            v-for="(item, index) in schedulePolicyList"
+            :key="index"
+            >{{ item.label }}</a-select-option
+          >
         </a-select>
       </a-form-item>
       <a-form-item label="权重">
-        <a-input id="error" v-decorator="[
+        <a-input
+          id="error"
+          v-decorator="[
             'weight',
-            { rules: [{ required: true, message: '权重不能为空!' }, { validator: checkNumber }] },
-          ]" placeholder="请输入权重" />
+            {
+              rules: [
+                { required: true, message: '权重不能为空!' },
+                { validator: checkNumber },
+              ],
+            },
+          ]"
+          placeholder="请输入权重"
+        />
       </a-form-item>
       <a-form-item label="队列中AM占用最大比例">
-        <a-input id="error" v-decorator="[
+        <a-input
+          id="error"
+          v-decorator="[
             'amShare',
-            { rules: [{ required: true, message: '队列中AM占用最大比例不能为空!' }, { validator: checkFloat }] },
-          ]" placeholder="请输入队列中AM占用最大比例" />
+            {
+              rules: [
+                { required: true, message: '队列中AM占用最大比例不能为空!' },
+                { validator: checkFloat },
+              ],
+            },
+          ]"
+          placeholder="请输入队列中AM占用最大比例"
+        />
       </a-form-item>
       <a-form-item label="是否允许队列抢占资源">
-        <a-switch v-decorator="[`allowPreemption`, { valuePropName: 'checked' }]"></a-switch>
+        <a-switch
+          v-decorator="[`allowPreemption`, { valuePropName: 'checked' }]"
+        ></a-switch>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+    <div class="ant-modal-confirm-sure-btns-new">
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -189,24 +269,18 @@ export default {
     checkNumber(rule, value, callback) {
       var reg = /^[1-9]\d*$/;
       if (!reg.test(value) && value) {
-        callback(
-          new Error("请输入正整数")
-        );
+        callback(new Error("请输入正整数"));
       }
       callback();
     },
 
-    checkFloat (rule, value, callback) {
+    checkFloat(rule, value, callback) {
       var reg = /^(([0-9])|([0-9]([0-9]+)))(.[0-9]+)?$/;
       if (!reg.test(value) && value) {
-        callback(
-          new Error("请输入正数")
-        );
+        callback(new Error("请输入正数"));
       }
       if (Number(value) === 0) {
-        callback(
-          new Error("请输入正数")
-        );
+        callback(new Error("请输入正数"));
       }
       callback();
     },
@@ -301,5 +375,4 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

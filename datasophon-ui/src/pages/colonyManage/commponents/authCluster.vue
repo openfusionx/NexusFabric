@@ -32,12 +32,21 @@
       class="p0-32-10-32"
     >
       <a-form-item label="集群管理员">
-          <a-select mode="multiple" v-decorator="['userIds', { rules: [{ required: false}]}]"  placeholder="请选择集群管理员">
-               <a-select-option :value="item.id" v-for="(item,index) in userList" :key="index">{{item.username}}</a-select-option>
-          </a-select>
+        <a-select
+          mode="multiple"
+          v-decorator="['userIds', { rules: [{ required: false }] }]"
+          placeholder="请选择集群管理员"
+        >
+          <a-select-option
+            :value="item.id"
+            v-for="(item, index) in userList"
+            :key="index"
+            >{{ item.username }}</a-select-option
+          >
+        </a-select>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button
         style="margin-right: 10px"
         type="primary"
@@ -58,7 +67,7 @@ export default {
         return {};
       },
     },
-    callBack:Function
+    callBack: Function,
   },
   data() {
     return {
@@ -73,7 +82,7 @@ export default {
       form: this.$form.createForm(this),
       value1: "",
       loading: false,
-      userList: [] //集群管理员列表
+      userList: [], //集群管理员列表
     };
   },
   watch: {},
@@ -82,43 +91,45 @@ export default {
       this.$destroyAll();
     },
     handleSubmit(e) {
-      const _this = this
+      const _this = this;
       e.preventDefault();
       this.form.validateFields((err, values) => {
         console.log(values);
         if (!err) {
           const params = {
-            "userIds": values.userIds || ""
-          }
-          if (JSON.stringify(this.detail) !== '{}') params.clusterId = this.detail.id
+            userIds: values.userIds || "",
+          };
+          if (JSON.stringify(this.detail) !== "{}")
+            params.clusterId = this.detail.id;
           this.loading = true;
-          this.$axiosPost(global.API.authCluster, params).then((res) => {
-            this.loading = false;
-            if (res.code === 200) {
-              if (params.userIds.length > 0) {
-                this.$message.success('授权成功', 2)
-              }else{
-                this.$message.success('取消授权成功', 2)
+          this.$axiosPost(global.API.authCluster, params)
+            .then((res) => {
+              this.loading = false;
+              if (res.code === 200) {
+                if (params.userIds.length > 0) {
+                  this.$message.success("授权成功", 2);
+                } else {
+                  this.$message.success("取消授权成功", 2);
+                }
+                this.$destroyAll();
+                _this.callBack();
               }
-              this.$destroyAll();
-              _this.callBack();
-            }
-          }).catch((err) => {});
+            })
+            .catch((err) => {});
         }
       });
     },
     queryAllUser() {
       this.$axiosPost(global.API.queryAllUser, {}).then((res) => {
         if (res.code === 200) {
-          this.userList = res.data
+          this.userList = res.data;
         }
-      })
-    }
+      });
+    },
   },
   mounted() {
-    this.queryAllUser()
+    this.queryAllUser();
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

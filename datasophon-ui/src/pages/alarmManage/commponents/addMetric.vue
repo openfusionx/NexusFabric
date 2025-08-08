@@ -25,18 +25,29 @@
 -->
 <template>
   <div style="padding-top: 20px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
       <a-form-item label="告警指标名称">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'alertQuotaName',
             { rules: [{ required: true, message: '告警指标名称不能为空!' }] },
-          ]" placeholder="请输入告警指标名称" />
+          ]"
+          placeholder="请输入告警指标名称"
+        />
       </a-form-item>
       <a-form-item label="指标表达式">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'alertExpr',
             { rules: [{ required: true, message: '指标表达式不能为空!' }] },
-          ]" placeholder="请输入指标表达式" />
+          ]"
+          placeholder="请输入指标表达式"
+        />
       </a-form-item>
       <!-- <a-form-item label="告警组类别">
         <a-select v-decorator="['serviceCategory', { rules: [{ required: true, message: '告警组类别不能为空!' }]}]" placeholder="请选择告警组类别">
@@ -44,63 +55,144 @@
         </a-select>
       </a-form-item>-->
       <a-form-item label="比较方式">
-        <a-select v-decorator="['compareMethod', { rules: [{ required: true, message: '比较方式不能为空!' }]}]" placeholder="请选择比较方式">
-          <a-select-option :value="item.value" v-for="(item,index) in compareMethodList" :key="index">{{item.label}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'compareMethod',
+            { rules: [{ required: true, message: '比较方式不能为空!' }] },
+          ]"
+          placeholder="请选择比较方式"
+        >
+          <a-select-option
+            :value="item.value"
+            v-for="(item, index) in compareMethodList"
+            :key="index"
+            >{{ item.label }}</a-select-option
+          >
         </a-select>
       </a-form-item>
       <a-form-item label="告警阀值">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'alertThreshold',
             { rules: [{ required: true, message: '告警阀值不能为空!' }] },
-          ]" placeholder="请输入告警阀值" />
+          ]"
+          placeholder="请输入告警阀值"
+        />
       </a-form-item>
       <a-form-item label="告警级别">
-        <a-select v-decorator="['alertLevel', { rules: [{ required: true, message: '告警级别不能为空!' }]}]" placeholder="请选择告警级别">
-          <a-select-option :value="item.value" v-for="(item,index) in alertLevelList" :key="index">{{item.label}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'alertLevel',
+            { rules: [{ required: true, message: '告警级别不能为空!' }] },
+          ]"
+          placeholder="请选择告警级别"
+        >
+          <a-select-option
+            :value="item.value"
+            v-for="(item, index) in alertLevelList"
+            :key="index"
+            >{{ item.label }}</a-select-option
+          >
         </a-select>
       </a-form-item>
       <a-form-item label="告警组">
-        <a-select v-decorator="['alertGroupId', { rules: [{ required: true, message: '告警组不能为空!' }]}]" placeholder="请选择告警组" @change="getRoleList">
-          <a-select-option :value="item.id" v-for="(item,index) in groupList" :key="index">{{item.alertGroupName}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'alertGroupId',
+            { rules: [{ required: true, message: '告警组不能为空!' }] },
+          ]"
+          placeholder="请选择告警组"
+          @change="getRoleList"
+        >
+          <a-select-option
+            :value="item.id"
+            v-for="(item, index) in groupList"
+            :key="index"
+            >{{ item.alertGroupName }}</a-select-option
+          >
         </a-select>
       </a-form-item>
       <a-form-item label="绑定角色">
-        <a-select v-decorator="['serviceRoleName', { rules: [{ required: true, message: '绑定角色不能为空!' }]}]" placeholder="请选择绑定角色">
-          <a-select-option :value="item.serviceRoleName" v-for="(item,index) in roleList" :key="index">{{item.serviceRoleName}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'serviceRoleName',
+            { rules: [{ required: true, message: '绑定角色不能为空!' }] },
+          ]"
+          placeholder="请选择绑定角色"
+        >
+          <a-select-option
+            :value="item.serviceRoleName"
+            v-for="(item, index) in roleList"
+            :key="index"
+            >{{ item.serviceRoleName }}</a-select-option
+          >
         </a-select>
       </a-form-item>
       <a-form-item label="通知组">
-        <a-select v-decorator="['noticeGroupId', { rules: [{ required: true, message: '通知组不能为空!' }]}]" placeholder="请选择通知组">
-          <a-select-option :value="item.value" v-for="(item,index) in noticeList" :key="index">{{item.label}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'noticeGroupId',
+            { rules: [{ required: true, message: '通知组不能为空!' }] },
+          ]"
+          placeholder="请选择通知组"
+        >
+          <a-select-option
+            :value="item.value"
+            v-for="(item, index) in noticeList"
+            :key="index"
+            >{{ item.label }}</a-select-option
+          >
         </a-select>
       </a-form-item>
       <a-form-item label="告警策略">
-        <a-radio-group v-decorator="['alertTactic', { rules: [{ required: true, message: '告警策略不能为空!' }]}]" placeholder="请选择告警策略">
+        <a-radio-group
+          v-decorator="[
+            'alertTactic',
+            { rules: [{ required: true, message: '告警策略不能为空!' }] },
+          ]"
+          placeholder="请选择告警策略"
+        >
           <a-radio :value="1">单次</a-radio>
           <a-radio :value="2">连续</a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item label="间隔时长(分钟)">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'intervalDuration',
             { rules: [{ required: true, message: '间隔时长(分钟)不能为空!' }] },
-          ]" placeholder="请输入间隔时长(分钟)" />
+          ]"
+          placeholder="请输入间隔时长(分钟)"
+        />
       </a-form-item>
       <a-form-item label="触发时长(秒)">
-        <a-input v-decorator="[
+        <a-input
+          v-decorator="[
             'triggerDuration',
             { rules: [{ required: true, message: '触发时长(秒)不能为空!' }] },
-          ]" placeholder="请输入触发时长(秒)" />
+          ]"
+          placeholder="请输入触发时长(秒)"
+        />
       </a-form-item>
       <a-form-item label="告警建议">
-        <a-input type="textarea" v-decorator="[
+        <a-input
+          type="textarea"
+          v-decorator="[
             'alertAdvice',
             { rules: [{ required: true, message: '告警建议不能为空!' }] },
-          ]" placeholder="请输入告警建议" />
+          ]"
+          placeholder="请输入告警建议"
+        />
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+    <div class="ant-modal-confirm-sure-btns-new">
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -279,5 +371,4 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

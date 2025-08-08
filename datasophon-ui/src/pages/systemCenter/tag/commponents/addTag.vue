@@ -41,7 +41,7 @@
         />
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button
         style="margin-right: 10px"
         type="primary"
