@@ -1,20 +1,18 @@
 <div align="center">
-         <a href="https://github.com/gaodayu168/datasophon" target="_blank" rel="noopener noreferrer">
-           <img src="website/static/img/logo.png" width="20%" height="20%" alt="DataSophon Logo" />
+         <a href="https://github.com/openfusionx/NexusFabric" target="_blank" rel="noopener noreferrer">
+           <img src="website/static/img/logo.png" width="20%" height="20%" alt="NexusFabric Logo" />
         </a>
- <h1>DataSophon</h1>
+ <h1>NexusFabric</h1>
  <h3>Makes it easy to manage and monitor clusters</h3>
 </div>
 
 <p align="center">
-  <img src="https://img.shields.io/github/release/gaodayu168/datasophon.svg">
-  <img src="https://img.shields.io/github/stars/gaodayu168/datasophon">
-  <img src="https://img.shields.io/github/forks/gaodayu168/datasophon">
-  <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg"></a>
-  <p align="center">
-    <a href="https://datasophon.github.io/datasophon-website/">Office Website</a> |
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green"></a>
+  <a href="#contributors"><img src="https://img.shields.io/badge/contributors-5-blue"></a>
+</p>
+<p align="center">
+    <a href="https://datasophon.github.io/datasophon-website/">Office Website</a> 
     <a href="https://github.com/datasophon/datasophon/blob/dev/README_CN.md">Chinese</a>
-  </p>
 </p>
 <h3>If you like,star fork it and join us</h3>
 
@@ -22,7 +20,7 @@
 
 Aiming at quickly deploying, managing, monitoring and automating the operation and maintenance of Big Data service components and nodes,helping you quickly build stable, efficient Big Data cluster services.
 
-# What is DataSophon?
+# What is NexusFabric?
 
 *The Three-Body Problem*, a Hugo Award-winning work of the world's highest science fiction literature, is known for its stunning "hard science fiction" style, and its author Liu Cixin is credited with "single-handedly raising Chinese science fiction to a world-class level".
 
@@ -38,14 +36,15 @@ DataSophon is a similar management platform. Unlike the Sophon, which aims to li
 * Flexible and convenient alarm service, which can realize user-defined alarm groups and alarm indicators
 * Strong scalability, users can integrate or upgrade any components through configuration.
 
-![img](website/static/img/dashboard.png)
+![img](website/static/img/dashboard.jpeg)
 
 # Product Architecture
 
 ![product-en](./website/static/img/product-en.png)
 
 # Architecture
-
+NexusFabric is a similar management platform. Unlike the Sophon, which aims to limit human's basic science and hinder human's technology development, NexusFabric is dedicated to automatical monitoring, operation and management of Big Data infrastructure components and nodes, helping you to quickly build a stable, efficient Big Data cluster service.
+   
 ![img](website/static/img/archive.png)
 
 # Questions
@@ -55,7 +54,6 @@ For questions, bugs and supports please open an [issue](https://github.com/gaoda
 
 Welcome to join the community for communication and sharing, and also welcome you to contribute to the community.
 Thank you very much for your support here~
-WeChat community group (recommended): Scan the QR code to add WeChat, invite to join the group, and apply for a comment of "Datasophon".
+WeChat community group (recommended): Scan the QR code to add WeChat, invite to join the group, and apply for a comment of "NexusFabric".
 
-![img](website/static/img/weixing.png)
 
