@@ -82,7 +82,7 @@
         </a-select>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button
         style="margin-right: 10px"
         type="primary"
@@ -127,9 +127,15 @@ export default {
       var reg = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/g;
       if (reg.test(value)) {
         callback(new Error("名称中不能包含中文"));
+        return;
       }
       if (/\s/g.test(value)) {
         callback(new Error("名称中不能包含空格"));
+        return;
+      }
+      if (value && value.length <= 2) {
+        callback(new Error("名称长度必须大于2个字符"));
+        return;
       }
       callback();
     },

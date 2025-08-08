@@ -27,7 +27,7 @@
   <div style="padding-top: 20px">
     <a-form
       :label-col="labelCol"
-      :wrapper-col="wrapperCol" 
+      :wrapper-col="wrapperCol"
       :form="form"
       class="p0-32-10-32 form-content"
     >
@@ -42,12 +42,23 @@
         />
       </a-form-item>
       <a-form-item label="告警组类别">
-          <a-select v-decorator="['alertGroupCategory', { rules: [{ required: true, message: '告警组类别不能为空!' }]}]"  placeholder="请选择告警组类别">
-               <a-select-option :value="item.serviceName" v-for="(item,index) in cateList" :key="index">{{item.serviceName}}</a-select-option>
-          </a-select>
+        <a-select
+          v-decorator="[
+            'alertGroupCategory',
+            { rules: [{ required: true, message: '告警组类别不能为空!' }] },
+          ]"
+          placeholder="请选择告警组类别"
+        >
+          <a-select-option
+            :value="item.serviceName"
+            v-for="(item, index) in cateList"
+            :key="index"
+            >{{ item.serviceName }}</a-select-option
+          >
+        </a-select>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-confirm-sure-btns-new">
       <a-button
         style="margin-right: 10px"
         type="primary"
@@ -68,7 +79,7 @@ export default {
         return {};
       },
     },
-    callBack:Function
+    callBack: Function,
   },
   data() {
     return {
@@ -84,7 +95,7 @@ export default {
       form: this.$form.createForm(this),
       value1: "",
       loading: false,
-      cateList: [] //告警组类别列表
+      cateList: [], //告警组类别列表
     };
   },
   watch: {},
@@ -93,49 +104,59 @@ export default {
       this.$destroyAll();
     },
     handleSubmit(e) {
-      const _this = this
+      const _this = this;
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
           const params = {
-            "alertGroupName": values.alertGroupName, 
-            "alertGroupCategory": values.alertGroupCategory,
-            clusterId: this.clusterId
-          }
-          if (JSON.stringify(this.detail) !== '{}') params.id = this.detail.id
+            alertGroupName: values.alertGroupName,
+            alertGroupCategory: values.alertGroupCategory,
+            clusterId: this.clusterId,
+          };
+          if (JSON.stringify(this.detail) !== "{}") params.id = this.detail.id;
           this.loading = true;
-          const ajaxApi = JSON.stringify(this.detail) !== '{}' ? global.API.saveGroup : global.API.saveGroup
-          this.$axiosJsonPost(ajaxApi, params).then((res) => {  
-            this.loading = false;
-            if (res.code === 200) {
-              this.$message.success('保存成功', 2)
-              this.$destroyAll();
-              _this.callBack();
-            }
-          }).catch((err) => {});
+          const ajaxApi =
+            JSON.stringify(this.detail) !== "{}"
+              ? global.API.saveGroup
+              : global.API.saveGroup;
+          this.$axiosJsonPost(ajaxApi, params)
+            .then((res) => {
+              this.loading = false;
+              if (res.code === 200) {
+                this.$message.success("保存成功", 2);
+                this.$destroyAll();
+                _this.callBack();
+              }
+            })
+            .catch((err) => {});
         }
       });
     },
     getAlarmCate() {
-      this.$axiosPost(global.API.getAlarmCate, {clusterId: this.clusterId}).then((res) => {
+      this.$axiosPost(global.API.getAlarmCate, {
+        clusterId: this.clusterId,
+      }).then((res) => {
         if (res.code === 200) {
-          this.cateList = res.data
-          if (JSON.stringify(this.detail) !== '{}') {
-            this.form.getFieldsValue(['alertGroupName', 'alertGroupCategory', 'clusterCode'])
+          this.cateList = res.data;
+          if (JSON.stringify(this.detail) !== "{}") {
+            this.form.getFieldsValue([
+              "alertGroupName",
+              "alertGroupCategory",
+              "clusterCode",
+            ]);
             this.form.setFieldsValue({
-              alertGroupName:this.detail.alertGroupName,
+              alertGroupName: this.detail.alertGroupName,
               alertGroupCategory: this.detail.alertGroupCategory,
-              clusterCode: this.detail.clusterCode
-            })
+              clusterCode: this.detail.clusterCode,
+            });
           }
         }
-      })
-    }
+      });
+    },
   },
   mounted() {
-    this.getAlarmCate()
+    this.getAlarmCate();
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

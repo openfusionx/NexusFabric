@@ -1,18 +1,35 @@
 <template>
   <div class="steps8">
-    <div style="display:flex; justify-content: space-between;" >
-       <div class=" w180" style="display: grid;"> 
-          <a-radio-group :default-value="currentList"  @change="changeCasting" style="margin-left:10px;"  >
-            <a-radio-button :value="item.id" v-for="(item, childIndex) in GroupList" :key="childIndex" :style="radioStyle"  button-style="solid">
-              {{item.roleGroupName}}
-            </a-radio-button>
-          </a-radio-group>
-        </div>
-      <div class="diff_list"> 
-        <code-diff v-show="!loading"  class="center" :old-string="oldStr" :new-string="newStr"  :context="context" outputFormat="side-by-side" />
+    <div style="display: flex; justify-content: space-between">
+      <div class="w180" style="display: grid">
+        <a-radio-group
+          :default-value="currentList"
+          @change="changeCasting"
+          style="margin-left: 10px"
+        >
+          <a-radio-button
+            :value="item.id"
+            v-for="(item, childIndex) in GroupList"
+            :key="childIndex"
+            :style="radioStyle"
+            button-style="solid"
+          >
+            {{ item.roleGroupName }}
+          </a-radio-button>
+        </a-radio-group>
+      </div>
+      <div class="diff_list">
+        <code-diff
+          v-show="!loading"
+          class="center"
+          :old-string="oldStr"
+          :new-string="newStr"
+          :context="context"
+          outputFormat="side-by-side"
+        />
       </div>
     </div>
-    <div class="ant-modal-confirm-btns-new">
+    <div class="ant-modal-restart-btns">
       <a-button
         style="margin-right: 10px"
         type="primary"
@@ -21,12 +38,11 @@
       >
     </div>
   </div>
- 
 </template>
 <script>
-import CodeDiff from 'vue-code-diff'
+import CodeDiff from "vue-code-diff";
 export default {
-  name:'textCompare',
+  name: "textCompare",
   props: {
     serviceId: {
       type: Object,
@@ -34,9 +50,9 @@ export default {
         return {};
       },
     },
-    callBack:Function
+    callBack: Function,
   },
-  components: {CodeDiff},
+  components: { CodeDiff },
   data() {
     return {
       labelCol: {
@@ -48,91 +64,88 @@ export default {
         sm: { span: 19 },
       },
       radioStyle: {
-        display: 'block',
-        height: '30px',
-        lineHeight: '30px',
-        marginTop:'5px' ,
+        display: "block",
+        height: "30px",
+        lineHeight: "30px",
+        marginTop: "5px",
       },
       form: this.$form.createForm(this),
       value1: "",
-      loading: true ,
-      currentList:undefined,
-      GroupList:[],  //列表
-      textConfig:{},
-      modifiedVal:[],
-      origionText:[],
-      oldStr: 'old code',
-      newStr: 'new code',
-      context: 1000000 //不同地方上下间隔多少行不隐藏
+      loading: true,
+      currentList: undefined,
+      GroupList: [], //列表
+      textConfig: {},
+      modifiedVal: [],
+      origionText: [],
+      oldStr: "old code",
+      newStr: "new code",
+      context: 1000000, //不同地方上下间隔多少行不隐藏
     };
   },
-  watch: {
-  },
+  watch: {},
   methods: {
     mapTotag() {},
     formCancel() {
-      const params={
-        "roleGroupId": this.currentList,
-      }
+      const params = {
+        roleGroupId: this.currentList,
+      };
       console.log(params);
       this.$axiosPost(global.API.restartObsoleteService, params).then((res) => {
-        if (res.code !== 200) return  
+        if (res.code !== 200) return;
         this.$message.success("重启服务成功");
         this.$destroyAll();
-      })
+      });
     },
-    changeCasting(val){
+    changeCasting(val) {
       console.log(val);
-      this.currentList = val.target.value
+      this.currentList = val.target.value;
       this.handleSubmit();
-
     },
     handleSubmit() {
-      const _this = this
+      const _this = this;
       const params = {
-        "serviceInstanceId":this.serviceId.id,
-        "roleGroupId": this.currentList,
-      }
+        serviceInstanceId: this.serviceId.id,
+        roleGroupId: this.currentList,
+      };
       console.log(params);
-      this.$axiosPost(global.API.configVersionCompare, params).then((res) => {  
-        this.loading = false;
-        if (res.code !== 200) return
-        // _this.callBack();
-        console.log(res);
-        this.textConfig = res.data
-        this.origionText = res.data.oldConfig
-        this.modifiedVal = res.data.newConfig
-        this.oldStr = JSON.stringify(this.origionText, null, 4);
-        this.newStr = JSON.stringify(this.modifiedVal, null, 4);
-      }).catch((err) => {});
-      
-      
+      this.$axiosPost(global.API.configVersionCompare, params)
+        .then((res) => {
+          this.loading = false;
+          if (res.code !== 200) return;
+          // _this.callBack();
+          console.log(res);
+          this.textConfig = res.data;
+          this.origionText = res.data.oldConfig;
+          this.modifiedVal = res.data.newConfig;
+          this.oldStr = JSON.stringify(this.origionText, null, 4);
+          this.newStr = JSON.stringify(this.modifiedVal, null, 4);
+        })
+        .catch((err) => {});
     },
     getServiceRoleType() {
-      const params={
-        serviceInstanceId :this.serviceId.id
-      }
+      const params = {
+        serviceInstanceId: this.serviceId.id,
+      };
       //this.loading = true;
       //角色组列表
       this.$axiosPost(global.API.getRoleGroupList, params).then((res) => {
-        if (res.code !== 200) return  
-        this.GroupList = res.data
+        if (res.code !== 200) return;
+        this.GroupList = res.data;
         if (this.GroupList.length > 0) {
           this.currentList = this.GroupList[0].id;
-          this.handleSubmit()
+          this.handleSubmit();
         }
-        
-      })
-    }
+      });
+    },
   },
   mounted() {
-    this.getServiceRoleType()
+    this.getServiceRoleType();
   },
 };
 </script>
 <style lang="less" scoped>
 .diff_list {
-  flex:1;
+  flex: 1;
   max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -140,13 +153,23 @@ export default {
   margin-left: 10px;
 }
 
-
- /deep/ .d2h-code-line-ctn  .hljs{
-    display: inline;
-    
-   }
+/deep/ .d2h-code-line-ctn .hljs {
+  display: inline;
+}
 /deep/ .d2h-code-side-line {
   height: 18px;
+}
+.ant-modal-restart-btns {
+  text-align: right;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0px 20px;
+  justify-content: center;
+  margin: 0 10px 20px;
+  .ant-btn {
+    width: 116px;
+  }
 }
 // /deep/ .d2h-wrapper>.d2h-code-side-line,
 // .d2h-wrapper .d2h-code-line {

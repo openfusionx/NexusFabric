@@ -25,21 +25,52 @@
 -->
 <template>
   <div style="padding-top: 20px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
-      <a-form-item v-if="type ==='add'" label="标签名称">
-        <a-input id="error" v-decorator="[
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
+      <a-form-item v-if="type === 'add'" label="标签名称">
+        <a-input
+          id="error"
+          v-decorator="[
             'nodeLabel',
-            { rules: [{ required: true, message: '标签名称不能为空!' }, { validator: checkName }] },
-          ]" placeholder="请输入标签名称" />
+            {
+              rules: [
+                { required: true, message: '标签名称不能为空!' },
+                { validator: checkName },
+              ],
+            },
+          ]"
+          placeholder="请输入标签名称"
+        />
       </a-form-item>
       <a-form-item v-if="type !== 'add'" label="标签">
-        <a-select v-decorator="['nodeLabelId', { rules: [{ required: true, message: '标签不能为空!' }]}]" placeholder="请选择标签">
-          <a-select-option :value="item.id" v-for="(item,index) in cateList" :key="index">{{item.nodeLabel}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'nodeLabelId',
+            { rules: [{ required: true, message: '标签不能为空!' }] },
+          ]"
+          placeholder="请选择标签"
+        >
+          <a-select-option
+            :value="item.id"
+            v-for="(item, index) in cateList"
+            :key="index"
+            >{{ item.nodeLabel }}</a-select-option
+          >
         </a-select>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+    <div class="ant-modal-confirm-sure-btns-new">
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -49,10 +80,10 @@ export default {
   props: {
     type: String,
     hostIds: {
-        type: Array,
-        default: () => {
-            return []
-        }
+      type: Array,
+      default: () => {
+        return [];
+      },
     },
     detail: {
       type: Object,
@@ -99,17 +130,17 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          if (this.type === 'add') this.savelabel(values)
-          if (this.type === 'del') this.delLabel(values)
-          if (this.type === 'handLabel') this.handLabel(values)
+          if (this.type === "add") this.savelabel(values);
+          if (this.type === "del") this.delLabel(values);
+          if (this.type === "handLabel") this.handLabel(values);
         }
       });
     },
     handLabel(values) {
-      const _this = this
+      const _this = this;
       const params = {
         nodeLabelId: values.nodeLabelId,
-        hostIds: this.hostIds
+        hostIds: this.hostIds,
       };
       this.loading = true;
       const ajaxApi = global.API.assginLabel;
@@ -174,5 +205,4 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

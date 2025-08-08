@@ -27,15 +27,37 @@
 
 <template>
   <div style="padding-top: 20px">
-    <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="form" class="p0-32-10-32 form-content">
+    <a-form
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+      :form="form"
+      class="p0-32-10-32 form-content"
+    >
       <a-form-item label="机架">
-        <a-select v-decorator="['rack', { rules: [{ required: true, message: '机架不能为空!' }]}]" placeholder="请选择机架">
-          <a-select-option :value="item.rack" v-for="(item,index) in frameList" :key="index">{{item.rack}}</a-select-option>
+        <a-select
+          v-decorator="[
+            'rack',
+            { rules: [{ required: true, message: '机架不能为空!' }] },
+          ]"
+          placeholder="请选择机架"
+        >
+          <a-select-option
+            :value="item.rack"
+            v-for="(item, index) in frameList"
+            :key="index"
+            >{{ item.rack }}</a-select-option
+          >
         </a-select>
       </a-form-item>
     </a-form>
-    <div class="ant-modal-confirm-btns-new">
-      <a-button style="margin-right: 10px" type="primary" @click.stop="handleSubmit" :loading="loading">确认</a-button>
+    <div class="ant-modal-confirm-sure-btns-new">
+      <a-button
+        style="margin-right: 10px"
+        type="primary"
+        @click.stop="handleSubmit"
+        :loading="loading"
+        >确认</a-button
+      >
       <a-button @click.stop="formCancel">取消</a-button>
     </div>
   </div>
@@ -110,5 +132,4 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>
