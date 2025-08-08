@@ -9,10 +9,10 @@
 <p align="center">
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green"></a>
   <a href="#contributors"><img src="https://img.shields.io/badge/contributors-5-blue"></a>
-  <p align="center">
-    <a href="https://datasophon.github.io/datasophon-website/">Office Website</a> |
+</p>
+<p align="center">
+    <a href="https://datasophon.github.io/datasophon-website/">Office Website</a> 
     <a href="https://github.com/datasophon/datasophon/blob/dev/README_CN.md">Chinese</a>
-  </p>
 </p>
 <h3>If you like,star fork it and join us</h3>
 
@@ -36,14 +36,15 @@ DataSophon is a similar management platform. Unlike the Sophon, which aims to li
 * Flexible and convenient alarm service, which can realize user-defined alarm groups and alarm indicators
 * Strong scalability, users can integrate or upgrade any components through configuration.
 
-![img](website/static/img/dashboard.png)
+![img](website/static/img/dashboard.jpeg)
 
 # Product Architecture
 
 ![product-en](./website/static/img/product-en.png)
 
 # Architecture
-
+NexusFabric is a similar management platform. Unlike the Sophon, which aims to limit human's basic science and hinder human's technology development, NexusFabric is dedicated to automatical monitoring, operation and management of Big Data infrastructure components and nodes, helping you to quickly build a stable, efficient Big Data cluster service.
+   
 ![img](website/static/img/archive.png)
 
 # Questions
@@ -53,7 +54,6 @@ For questions, bugs and supports please open an [issue](https://github.com/gaoda
 
 Welcome to join the community for communication and sharing, and also welcome you to contribute to the community.
 Thank you very much for your support here~
-WeChat community group (recommended): Scan the QR code to add WeChat, invite to join the group, and apply for a comment of "Datasophon".
+WeChat community group (recommended): Scan the QR code to add WeChat, invite to join the group, and apply for a comment of "NexusFabric".
 
-![img](website/static/img/weixing.png)
 

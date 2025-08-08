@@ -1,4 +1,4 @@
-# 为DataSophon升级hive3.1.0到hive3.1.3,同时spark升级到3.3.4并集成配置hive on spark 模式
+# 为NexusFabric升级hive3.1.0到hive3.1.3,同时spark升级到3.3.4并集成配置hive on spark 模式
 
 ### 下载编译配置好的hive3.1.3安装包和spark3.3.4安装包（已放入百度云盘）修改以下参数
 
@@ -7,14 +7,14 @@
 提取码：soph
 ```
 
-### 将hive3.1.3.tar.gz和hive3.1.3.tar.gz.md5上传到DataSophon的安装包中
+### 将hive3.1.3.tar.gz和hive3.1.3.tar.gz.md5上传到NexusFabric的安装包中
 
 ```shell
-cp ./hive3.1.3.tar.gz /opt/datasophon/DDP/packages/
-cp ./hive3.1.3.tar.gz.md5 /opt/datasophon/DDP/packages/
+cp ./hive3.1.3.tar.gz /opt/DataSophon/DDP/packages/
+cp ./hive3.1.3.tar.gz.md5 /opt/DataSophon/DDP/packages/
 ```
 
-### 将spark-3.3.4.tar.gz和spark-3.3.4.tar.gz.md5上传到DataSophon的安装包中
+### 将spark-3.3.4.tar.gz和spark-3.3.4.tar.gz.md5上传到NexusFabric的安装包中
 
 ```shell
 cp ./spark-3.3.4.tar.gz /opt/datasophon/DDP/packages/
@@ -23,7 +23,7 @@ cp ./spark-3.3.4.tar.gz.md5 /opt/datasophon/DDP/packages/
 
 ### hive3.1.3安装包是经过改动适配的，并在里面补充了相关兼容性jar来适配（hive on spark）模式，spark3.3.4.tar.gz安装包改动较小也可自行在网络下载
 
-### DataSophon修改datasophopn-manager中conf/meat/DDP-1.2.1/HIVE/service_ddl.json，修改以下参数
+### NexusFabric修改datasophopn-manager中conf/meat/DDP-1.2.1/HIVE/service_ddl.json，修改以下参数
 
 ```
 "version": "3.1.3",
@@ -31,7 +31,7 @@ cp ./spark-3.3.4.tar.gz.md5 /opt/datasophon/DDP/packages/
 "decompressPackageName": "hive-3.1.3",
 ```
 
-### DataSophon修改datasophopn-manager中conf/meat/DDP-1.2.1/SPARK3/service_ddl.json，修改以下参数
+### NexusFabric修改datasophopn-manager中conf/meat/DDP-1.2.1/SPARK3/service_ddl.json，修改以下参数
 
 ```
 "version": "3.3.4",
@@ -39,7 +39,7 @@ cp ./spark-3.3.4.tar.gz.md5 /opt/datasophon/DDP/packages/
 "decompressPackageName": "spark-3.3.4",
 ```
 
-### 在datasophon中删除已经安装的hive服务和spark服务
+### 在NexusFabric中删除已经安装的hive服务和spark服务
 
 ### 修改环境变量
 
@@ -63,7 +63,7 @@ sh bin/datasophon-worker.sh restart worker
 sh /opt/datasophon/datasophon-manager-1.2.1/bin/datasophon-api.sh restart api
 ```
 
-### 在datasophon中安装的hive3.1.3服务和spark3.3.4服务
+### 在NexusFabric中安装的hive3.1.3服务和spark3.3.4服务
 
 ### 上传 spark Jar 包并更换引擎
 
