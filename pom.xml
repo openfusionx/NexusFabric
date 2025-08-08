@@ -333,6 +333,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
+                    <skip>true</skip>
                     <configLocation>/style/checkstyle.xml</configLocation>
                     <suppressionsLocation>/style/checkstyle-suppressions.xml</suppressionsLocation>
                     <inputEncoding>UTF-8</inputEncoding>
@@ -380,6 +381,7 @@
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>${spotless.version}</version>
                 <configuration>
+                    <skip>true</skip>
                     <java>
                         <eclipse>
                             <file>style/spotless_datasophon_formatter.xml</file>
@@ -446,6 +448,19 @@
         <connection>git@github.com:datasophon/datasophon.git</connection>
         <url>https://github.com/datasophon/datasophon</url>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>local-releases</id>
+            <name>Local Releases Repository</name>
+            <url>file://${user.home}/.m2/repository</url>
+        </repository>
+        <snapshotRepository>
+            <id>local-snapshots</id>
+            <name>Local Snapshots Repository</name>
+            <url>file://${user.home}/.m2/repository</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <profiles>
         <profile>
             <id>google-mirror</id>

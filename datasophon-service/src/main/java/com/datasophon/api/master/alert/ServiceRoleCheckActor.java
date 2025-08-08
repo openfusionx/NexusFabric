@@ -56,7 +56,7 @@ public class ServiceRoleCheckActor extends UntypedActor {
                             new QueryWrapper<ClusterServiceRoleInstanceEntity>()
                                     .ne(
                                             Constants.ROLE_TYPE,
-                                            ServiceRoleType.CLIENT.getCode());
+                                            ServiceRoleType.CLIENT.getCode()));
             
             if (!list.isEmpty()) {
                 Map<String, ClusterServiceRoleInstanceEntity> map = translateListToMap(list);
