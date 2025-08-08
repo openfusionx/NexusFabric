@@ -1,16 +1,14 @@
 <div align="center">
-         <a href="https://github.com/gaodayu168/datasophon" target="_blank" rel="noopener noreferrer">
-           <img src="website/static/img/logo.png" width="20%" height="20%" alt="DataSophon Logo" />
+         <a href="https://github.com/openfusionx/NexusFabric" target="_blank" rel="noopener noreferrer">
+           <img src="website/static/img/logo.png" width="20%" height="20%" alt="NexusFabric Logo" />
         </a>
- <h1>DataSophon</h1>
+ <h1>NexusFabric</h1>
  <h3>Makes it easy to manage and monitor clusters</h3>
 </div>
 
 <p align="center">
-  <img src="https://img.shields.io/github/release/gaodayu168/datasophon.svg">
-  <img src="https://img.shields.io/github/stars/gaodayu168/datasophon">
-  <img src="https://img.shields.io/github/forks/gaodayu168/datasophon">
-  <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green"></a>
+  <a href="#contributors"><img src="https://img.shields.io/badge/contributors-5-blue"></a>
   <p align="center">
     <a href="https://datasophon.github.io/datasophon-website/">Office Website</a> |
     <a href="https://github.com/datasophon/datasophon/blob/dev/README_CN.md">Chinese</a>
@@ -22,7 +20,7 @@
 
 Aiming at quickly deploying, managing, monitoring and automating the operation and maintenance of Big Data service components and nodes,helping you quickly build stable, efficient Big Data cluster services.
 
-# What is DataSophon?
+# What is NexusFabric?
 
 *The Three-Body Problem*, a Hugo Award-winning work of the world's highest science fiction literature, is known for its stunning "hard science fiction" style, and its author Liu Cixin is credited with "single-handedly raising Chinese science fiction to a world-class level".
 
